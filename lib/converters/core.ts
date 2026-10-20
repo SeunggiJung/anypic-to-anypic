@@ -3,7 +3,8 @@ import { FORMATS } from "../formats";
 import { encodeBmp, encodeGif, encodeIco } from "./encoders";
 import { extractExifSegment, injectExif, resetOrientation } from "./exif";
 import { computeLayout } from "./size";
-import { ConvertError, type ConvertRequest, type OutputFormat } from "./types";
+import { ConvertError, type ConvertNote, type ConvertRequest, type OutputFormat } from "./types";
+import { MAX_PATHS, TRACE_MAX_SIDE, analyzeImage, buildNotes, traceToSvg } from "./vectorize";
 
 /** Worker에서는 OffscreenCanvas, 지원하지 않는 환경(메인 스레드 폴백)에서는 <canvas> */
 type AnyCanvas = OffscreenCanvas | HTMLCanvasElement;
@@ -105,13 +106,53 @@ export interface ConvertOutput {
   blob: Blob;
   width: number;
   height: number;
+  /** 사용자에게 알릴 주의사항 (SVG 트레이싱) */
+  notes: ConvertNote[];
+}
+
+/**
+ * 래스터를 SVG로 트레이싱한다. 레이아웃(크기·맞춤·정렬)은 다른 형식과 같게 적용하되,
+ * 추적은 한 변 최대 TRACE_MAX_SIDE로 줄인 해상도에서 하고 SVG의 표시 크기(width/height)만 원래 크기로 적는다.
+ */
+function convertToSvg(
+  bitmap: ImageBitmap,
+  layout: ReturnType<typeof computeLayout>,
+  req: ConvertRequest,
+): ConvertOutput {
+  const { width, height, dx, dy, dw, dh } = layout;
+  const scale = Math.min(1, TRACE_MAX_SIDE / Math.max(width, height));
+  const tw = Math.max(1, Math.round(width * scale));
+  const th = Math.max(1, Math.round(height * scale));
+
+  const canvas = createCanvas(tw, th);
+  const ctx = context2d(canvas);
+  if (req.options.fillBackground) {
+    ctx.fillStyle = req.options.background;
+    ctx.fillRect(0, 0, tw, th);
+  }
+  drawScaled(bitmap, Math.round(dx * scale), Math.round(dy * scale), Math.max(1, Math.round(dw * scale)), Math.max(1, Math.round(dh * scale)), ctx, true);
+
+  const pixels = readPixels(canvas);
+  const analysis = analyzeImage(pixels);
+  const { svg, paths } = traceToSvg(pixels, req.options.svg, width, height);
+  // 경로가 너무 많으면 결과를 열거나 편집할 수 없을 만큼 무거워진다
+  if (paths > MAX_PATHS) throw new ConvertError("svgTooComplex", String(paths));
+
+  return {
+    blob: new Blob([svg], { type: "image/svg+xml" }),
+    width,
+    height,
+    notes: buildNotes(analysis, paths, scale),
+  };
 }
 
 export async function convert(req: ConvertRequest): Promise<ConvertOutput> {
   const { output, quality, background, fillBackground, stripExif } = req.options;
   const bitmap = await decode(req);
   try {
-    const { width, height, dx, dy, dw, dh } = computeLayout(bitmap.width, bitmap.height, req.options.resize, output);
+    const layout = computeLayout(bitmap.width, bitmap.height, req.options.resize, output);
+    if (output === "svg") return convertToSvg(bitmap, layout, req);
+    const { width, height, dx, dy, dw, dh } = layout;
 
     const canvas = createCanvas(width, height);
     const ctx = context2d(canvas);
@@ -147,7 +188,7 @@ export async function convert(req: ConvertRequest): Promise<ConvertOutput> {
         blob = new Blob([bytes as BlobPart], { type: "image/jpeg" });
       }
     }
-    return { blob, width, height };
+    return { blob, width, height, notes: [] };
   } finally {
     bitmap.close();
   }

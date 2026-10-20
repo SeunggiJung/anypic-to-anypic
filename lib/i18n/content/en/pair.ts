@@ -3,6 +3,7 @@ import { fullFormat, kindOf, sizeRatio, type Change, type FullFormat, type PairC
 import type { Pair } from "../../../seo/pairs";
 import { FORMAT_TEXT } from "./formats";
 import { PAIR_NOTES } from "./pairNotes";
+import { svgChanges, svgFaq, svgLeadSecond, svgWhen } from "./svgTarget";
 
 const full = (id: FormatId) => fullFormat(id, FORMAT_TEXT);
 
@@ -52,6 +53,8 @@ function sizeHint(from: FullFormat): string {
 }
 
 function buildChanges(pair: Pair): Change[] {
+  // 도착 형식이 SVG면 래스터를 도형으로 다시 그리는 트레이싱이라 전용 문단을 쓴다
+  if (pair.to === "svg") return svgChanges(full(pair.from));
   const from = full(pair.from);
   const to = full(pair.to);
   const fk = kindOf(from.id);
@@ -169,6 +172,7 @@ function buildChanges(pair: Pair): Change[] {
 }
 
 function buildWhen(pair: Pair): string[] {
+  if (pair.to === "svg") return svgWhen(full(pair.from));
   const from = full(pair.from);
   const to = full(pair.to);
   const out: string[] = [];
@@ -236,12 +240,16 @@ function buildLead(pair: Pair): string[] {
   else if (fromTr.appSupport <= 3) p1 += ` Current browsers open ${from.name}, but support in programs and services is uneven.`;
   else p1 += ` ${from.name} opens in most environments, but another format such as ${to.name} may suit some uses better.`;
 
-  const p2 = `${to.name} is ${to.summary}. When you convert ${from.name} to ${to.name}, ${gainSummary(from, to).replace(/^./, (c) => c.toLowerCase())}`;
+  const p2 =
+    pair.to === "svg"
+      ? svgLeadSecond(from, to.summary)
+      : `${to.name} is ${to.summary}. When you convert ${from.name} to ${to.name}, ${gainSummary(from, to).replace(/^./, (c) => c.toLowerCase())}`;
   const p3 = `This converter reads the file itself to confirm it is ${from.name}, then converts it to ${to.name} right in your browser. Your image is never uploaded.`;
   return [p1, p2, p3];
 }
 
 function buildFaq(pair: Pair, changes: Change[]): PairContent["faq"] {
+  if (pair.to === "svg") return svgFaq(full(pair.from));
   const from = full(pair.from);
   const to = full(pair.to);
   const fk = kindOf(from.id);

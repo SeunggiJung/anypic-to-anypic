@@ -1,0 +1,83 @@
+---
+title: "Converting PNG to SVG: What Works and What Doesn't"
+description: "How PNG-to-SVG tracing works and where it fails, with measured numbers: why logos and icons work, photos don't, and how to check the result."
+date: 2026-10-20
+tags: [SVG, PNG, vector, tracing]
+related: [png-to-svg, jpg-to-svg, svg-to-png]
+---
+
+"Convert my PNG to SVG" is a common request, but this conversion is different from the others. To avoid being surprised by a result that doesn't match your expectations, here are the principle and the limits first.
+
+## Why is it different from other conversions?
+
+Converting PNG to JPG saves the same pixels in a different way. A PNG, however, is a **grid of pixels** and an SVG is **a description of shapes and curves**, so nothing maps directly between them. To turn a PNG into an SVG, a program has to look at the image and **estimate and redraw it as shapes**: "this is a red circle and that is a blue rectangle." This is called tracing (vectorizing).
+
+- The result is **not identical** to the original. Edges change a little and small details can disappear.
+- What stays sharp when enlarged is the **outline of the newly drawn shapes**. Detail that wasn't in the original doesn't appear.
+- So the result differs greatly depending on the kind of image, even for the same PNG.
+
+## What we measured
+
+We converted several images to SVG with this site's converter and measured the file sizes, with different color and detail settings.
+
+| Image | Original PNG | 4 colors, simple | 8 colors, medium | 16 colors, medium | 32 colors, precise |
+| --- | --- | --- | --- | --- | --- |
+| Flat icon 128×128 | 2.6KB | 0.6KB | 1.5KB | 1.0KB | 12.4KB |
+| Shape logo 300×300 (3 colors) | 5.9KB | 2.5KB | 4.3KB | 4.3KB | 10.7KB |
+| Logo with text 300×300 | 9.3KB | 4.9KB | 16.0KB | 13.0KB | 95.2KB |
+| Gradient 300×200 | 33.7KB | 1.2KB | 3.4KB | 6.2KB | 24.9KB |
+| Photo 1280×854 | 2.2MB | 1.0MB | 3.0MB | 4.8MB | 15.6MB |
+
+What you can read from this:
+
+- **Simple icons and shape logos come out smaller as SVG.** They have few colors and clear edges, so a few shapes are enough.
+- **A logo with text is sensitive to the settings.** Letter curves need many shapes. The same image ranged from 4.9KB to 95KB, and at 8 colors, medium it was 1.7 times larger than the original PNG.
+- **Higher settings aren't better.** 32 colors, precise only made the file much larger. For logos a lower setting is often cleaner.
+- **Gradients split into bands when you use few colors.** At 4 colors the file is smallest, but the smooth change is gone.
+- **Photos don't suit any setting.** Even the lowest setting gave 1.0MB, and the precise setting produced 15.6MB (111,000 shapes), 7 times the original. Reducing to 4 colors makes the file smaller but turns the image into a poster-like smear.
+
+## Images that work well
+
+- **Logos, icons and symbols** with few colors (usually 2-8) and clear edges
+- Flat-color illustrations and stickers
+- PNGs with a **transparent** background (the transparency is kept)
+- Images whose original resolution is large enough (small images give rough outlines)
+
+## Images that don't suit it
+
+- **Photos** and realistic images. This site shows a warning on the result screen when it detects an image with many colors.
+- Images with many gradients, shadows or textures
+- Very small images (for example a 16×16 favicon). There is too little outline information, so the shapes look angular.
+- Logos saved as **JPG with compression noise**. Slightly different colors are mixed into areas of the same color, so the shapes split messily. Try lowering the colors and setting the detail to simple.
+
+## How to set it
+
+- **Colors**: Start slightly above the number of colors actually used. For a 3-color logo, 4-6 is enough. Raise it if colors look off, and lower it if the file is large.
+- **Detail**: Start with **Simple** or **Medium**. Raise to precise only when outlines get smeared; precise adds many shapes and the file grows quickly.
+- The size you choose is only the **display size**. An SVG stays sharp when enlarged, but tracing is done on an image reduced to at most 1024px on a side, so very small details of the original aren't reflected.
+
+## What to check after converting
+
+1. **Zoom in**: Enlarge the result preview and look for bumpy or broken outlines.
+2. **Compare colors**: See that the colors haven't changed and that gradients haven't split into bands.
+3. **Text**: Text becomes shapes, not a font. If it is hard to read or its shape has changed, use the original design file.
+4. **File size**: If the result is much larger than the original, lower the colors and detail and convert again.
+5. **Background**: An original without transparency, such as a JPG, gets its background as a big shape. Delete it in an editor if you don't need it.
+6. **Fitness for the purpose**: For a trademark or brand logo, even a small change in shape can be a problem. Enlarge and check by eye before you use it.
+
+<Callout title="If you have the original vector file, use that">
+If the designer or the tool that made the logo still has the original file, such as AI, Figma or SVG, using that is the most accurate. Tracing is the second best when you don't have it. Specialist tools such as Illustrator's Image Trace or Inkscape's Trace Bitmap can refine the result more finely.
+</Callout>
+
+## Limits
+
+- Tracing is done on an image reduced to at most 1024px on a side. For larger images the result screen tells you.
+- With 20,000 or more shapes (paths), we warn that it may be slow to open or edit, and above 200,000 the conversion is stopped.
+- The maximum number of colors is 64.
+- Animated GIF and WebP files convert only their first frame, and multi-page TIFFs only the first page.
+
+<ConvertLink to="png-to-svg">Convert PNG to SVG</ConvertLink>
+
+<ConvertLink to="svg-to-png">Convert SVG to PNG</ConvertLink>
+
+The reverse direction is in [Choosing the Resolution for SVG to PNG](/guides/svg-to-png-size/), and the format itself is explained on the [SVG format page](/formats/svg/).

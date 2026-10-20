@@ -17,6 +17,7 @@
     "gifenc": "^1.0.3",
     "gray-matter": "^4.0.3",
     "heic2any": "^0.0.4",
+    "imagetracerjs": "^1.2.6",
     "next": "16.4.2",
     "next-mdx-remote": "^6.0.0",
     "react": "19.3.0",

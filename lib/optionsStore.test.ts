@@ -17,6 +17,7 @@ describe("sanitizeOptions", () => {
       background: "#00ff00",
       fillBackground: true,
       pixelArt: true,
+      svg: { colors: 8, detail: "high" as const },
     };
     expect(sanitizeOptions(JSON.parse(JSON.stringify(saved)))).toEqual(saved);
   });

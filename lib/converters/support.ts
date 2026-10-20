@@ -18,5 +18,5 @@ async function canEncode(mime: string): Promise<boolean> {
 /** 브라우저(메인 스레드)에서 출력 가능한 형식을 감지한다. */
 export async function detectOutputSupport(): Promise<OutputSupport> {
   const [webp, avif] = await Promise.all([canEncode("image/webp"), canEncode("image/avif")]);
-  return { png: true, jpg: true, gif: true, bmp: true, ico: true, webp, avif };
+  return { png: true, jpg: true, gif: true, bmp: true, ico: true, svg: true, webp, avif };
 }

@@ -43,6 +43,10 @@ function errorMessage(t: Messages, err: unknown, output: OutputFormat): string {
         return t.errors.encode(FORMATS[output].name);
       case "tooBig":
         return t.errors.tooBig;
+      case "svgSame":
+        return t.errors.svgSame;
+      case "svgTooComplex":
+        return t.errors.svgTooComplex(Number(err.message) || 0);
     }
   }
   return t.errors.unknown;
@@ -152,12 +156,18 @@ export default function Converter({ initialOutput, inputHint }: Props) {
       for (let item = queue.shift(); item; item = queue.shift()) {
         try {
           const r = await convertFile(item.file, item.detected!, opts);
+          // 결과가 원본보다 훨씬 크면 알린다 (벡터가 항상 작은 것은 아니다)
+          const notes = [...r.notes];
+          if (opts.output === "svg" && r.blob.size > item.file.size * 1.2) {
+            notes.push({ code: "svgLarger", value: r.blob.size / item.file.size });
+          }
           patch(item.id, {
             status: "done",
             result: {
               blob: r.blob,
               width: r.width,
               height: r.height,
+              notes,
               name: `${baseName(item.file.name)}.${outputExtension(opts.output)}`,
             },
           });
@@ -220,6 +230,7 @@ export default function Converter({ initialOutput, inputHint }: Props) {
                 onReset={() => setOptions({ ...DEFAULT_OPTIONS, output: chosen.output })}
                 disabled={converting}
                 hasJpgInput={valid.some((i) => i.detected === "jpg")}
+                hasPhotoInput={valid.some((i) => i.detected === "jpg" || i.detected === "heic" || i.detected === "tiff")}
               />
               <div>
                 <button

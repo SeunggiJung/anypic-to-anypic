@@ -78,6 +78,20 @@ export const PAIR_NOTES: Record<string, PairNote> = {
       "If the SVG links to external fonts or external images, they can be missing when the browser draws it. An SVG whose text has been converted to outlines is the safest.",
     ],
   },
+  "png-to-svg": {
+    tips: [
+      "A logo PNG with a transparent background converts best. Start with 4-8 colors and medium detail, then enlarge the result preview to check it. If the outline is rough, raise the colors or detail; if the file is too large, lower them.",
+      "A small PNG with soft edges can give lumpy outlines. If you can, convert from an original that is at least twice as large.",
+      "It is normal for the result to differ a little from the original. If the exact shape matters, as with a brand logo, first check whether an original vector file (AI, Figma and so on) exists.",
+    ],
+  },
+  "jpg-to-svg": {
+    tips: [
+      "Because of compression noise, a JPG has slightly different colors mixed in even where the color looks the same, so even a flat-color logo can be split into messy shapes. Try lowering the colors and setting the detail to simple.",
+      "If it's a photo, this conversion isn't recommended. If the result screen shows the photo warning, JPG or WebP is a better choice than SVG.",
+      "JPG has no transparent background, so a white background is included as one big shape. After converting, delete the background shape in an editor before using it.",
+    ],
+  },
   "svg-to-jpg": {
     tips: [
       "The vector's transparent background is filled with the background color you choose in JPG. If you need a white background for a logo on a social network or document, the default works as is.",

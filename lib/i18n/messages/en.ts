@@ -123,7 +123,38 @@ export const en: Messages = {
     heic: "Couldn't decode this HEIC file. It may be an unsupported HEIC variant or corrupted.",
     tiff: "Couldn't decode this TIFF file. It may be an unsupported TIFF variant.",
     svg: "Couldn't render this SVG. Please check that it is a valid SVG.",
+    svgSame: "SVG is already a vector format. Choose another format, or just use this file as it is.",
+    svgTooComplex: (paths: number) =>
+      `The vector result is too complex (${paths.toLocaleString("en-US")} paths). Lower the number of colors or the detail, or reduce the size, and try again. Photos aren't suited to SVG conversion.`,
     unknown: "An unknown error occurred during conversion.",
+  },
+  svg: {
+    noticeTitle: "Before you convert to SVG (vector)",
+    notice: [
+      "This conversion is an estimate, not an exact copy. It finds the outlines of areas of color in the image and redraws them as shapes (tracing), so the result is not identical to the original. Edges may shift a little and small details can disappear.",
+      "It suits images with few colors and clear edges, such as logos, icons and flat-color illustrations. Photos and images with many gradients come out rough, and the file can be several times larger than the original or more.",
+      "Colors are simplified to the number of colors you set. Colors can change, and smooth gradients may split into bands.",
+      "Text becomes shapes, not a font. You can't edit or search the text later.",
+      "The result is a collection of many shapes and may need cleaning up in an editor. If you have the original design file (AI, Figma and so on), using that is the most accurate.",
+      "Tracing is done on an image reduced to at most 1024px on a side, and only the display size of the SVG is set to the size you chose. It stays sharp when enlarged, but very small details of the original aren't reflected.",
+      "For important uses such as trademarks or brand logos, enlarge the result and check it by eye before you use it.",
+    ],
+    photoFormatHint: "JPG, HEIC and TIFF files are often photos. If yours is a photo, converting it to SVG isn't recommended.",
+    colors: "Colors",
+    colorsHint: "More colors look closer to the original but make the file larger. For logos and icons, 4-16 colors is often enough.",
+    detail: "Detail",
+    detailLow: "Simple (small file)",
+    detailMedium: "Medium",
+    detailHigh: "Precise (large file)",
+    detailHint: "Higher precision follows outlines more closely but creates more shapes and a larger file.",
+  },
+  resultNotes: {
+    title: "Please check the result",
+    svgPhotoLike: "This looks like an image with many colors, such as a photo. For these, the SVG result can be rough and the file very large. If it is a photo, JPG or WebP is recommended instead of SVG.",
+    svgDownscaled: (side: number) => `Because the image is large, tracing was done at a size of up to ${side}px on a side. Small details may have been lost.`,
+    svgComplex: (paths: number) =>
+      `There are ${paths.toLocaleString("en-US")} shapes (paths), which is a lot. It may be slow to open or edit; try lowering the colors or detail and converting again.`,
+    svgLarger: (ratio: number) => `The result (SVG) is about ${ratio >= 10 ? Math.round(ratio) : ratio.toFixed(1)}× larger than the original. A vector isn't always smaller.`,
   },
   privacy: {
     badge: "Your files are never uploaded",
@@ -184,6 +215,10 @@ export const en: Messages = {
       {
         q: "Can I set an exact size, such as 256×256?",
         a: "Yes. Choose 'Set exact size' under Size and enter the width and height in px. For images with a different aspect ratio you can stretch or squash them, keep the ratio and center them with the leftover area transparent (or filled with a color), fill the frame and crop the overflow, or place them at their original size in the center. The same settings apply to all files at once.",
+      },
+      {
+        q: "Can I convert PNG to SVG? What should I watch out for?",
+        a: "Yes, choose SVG as the output format. But this isn't an exact copy of the original; it is tracing (an estimate) that redraws areas of color as shapes. It works well for logos, icons and flat-color illustrations, but photos and images with many gradients come out rough and the file can be much larger than the original. Text becomes shapes and colors are simplified to the number you set. Be sure to read the notice before converting and the warnings after.",
       },
       {
         q: "Why can't I save as AVIF?",

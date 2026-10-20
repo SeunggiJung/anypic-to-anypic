@@ -184,10 +184,15 @@ export const FORMAT_TEXT: Record<FormatId, FormatText> = {
     summary: "an XML-based vector format that stays sharp at any size",
     description: [
       "SVG stores lines, shapes and curves as math in text (XML) instead of pixels. It stays sharp however far you zoom, and a simple logo can be just a few KB.",
-      "On this site SVG is supported only as input, which is turned into a raster image (PNG, JPG and so on). If the SVG has no size information, it is drawn 1024px wide. Converting raster images to SVG isn't supported.",
+      "On this site an SVG can be turned into a raster image such as PNG or JPG (if it has no size information, it is drawn 1024px wide), and you can also go the other way: raster images can be converted to SVG by vector tracing. Tracing is an estimate that redraws areas of color as shapes rather than copying the original, so it works well for logos and icons but not for photos.",
     ],
     strengths: ["Independent of resolution", "Editable and stylable as code", "Very small files for simple graphics"],
-    weaknesses: ["Unsuitable for photos", "Complex SVGs can be slow to render", "Some services reject SVG uploads"],
+    weaknesses: [
+      "Unsuitable for photos",
+      "Complex SVGs can be slow to render",
+      "Some services reject SVG uploads",
+      "Tracing a raster image into SVG isn't identical to the original and doesn't suit photos",
+    ],
     useCases: ["Logos and icons", "Illustrations", "Responsive web graphics"],
     compatibility: "Every current browser supports it, but social networks, messengers and some upload forms don't accept SVG.",
     history: [

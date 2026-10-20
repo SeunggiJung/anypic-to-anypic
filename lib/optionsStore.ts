@@ -1,5 +1,13 @@
 import { OUTPUT_FORMATS } from "./formats";
-import { DEFAULT_OPTIONS, type Align, type ConvertOptions, type FitMode, type OutputFormat, type ResizeMode } from "./converters/types";
+import {
+  DEFAULT_OPTIONS,
+  type Align,
+  type ConvertOptions,
+  type FitMode,
+  type OutputFormat,
+  type ResizeMode,
+  type TraceDetail,
+} from "./converters/types";
 
 /** 변환 옵션을 브라우저(localStorage)에 기억한다. 서버로는 전송되지 않는다. 형식이 바뀌면 키 버전을 올린다. */
 const KEY = "anypic:options:v1";
@@ -7,6 +15,7 @@ const KEY = "anypic:options:v1";
 const MODES: ResizeMode[] = ["original", "width", "height", "percent", "fixed"];
 const FITS: FitMode[] = ["stretch", "contain", "cover", "center"];
 const ALIGNS: Align[] = [0, 0.5, 1];
+const DETAILS: TraceDetail[] = ["low", "medium", "high"];
 
 const int = (v: unknown, min: number, max: number, fallback: number) =>
   typeof v === "number" && Number.isFinite(v) ? Math.min(max, Math.max(min, Math.round(v))) : fallback;
@@ -18,6 +27,7 @@ export function sanitizeOptions(raw: unknown): ConvertOptions {
   const d = DEFAULT_OPTIONS;
   const o = (typeof raw === "object" && raw !== null ? raw : {}) as Record<string, unknown>;
   const r = (typeof o.resize === "object" && o.resize !== null ? o.resize : {}) as Record<string, unknown>;
+  const s = (typeof o.svg === "object" && o.svg !== null ? o.svg : {}) as Record<string, unknown>;
   return {
     output: pick<OutputFormat>(o.output, OUTPUT_FORMATS as OutputFormat[], d.output),
     quality: int(o.quality, 1, 100, d.quality),
@@ -33,6 +43,7 @@ export function sanitizeOptions(raw: unknown): ConvertOptions {
     background: typeof o.background === "string" && /^#[0-9a-f]{6}$/i.test(o.background) ? o.background : d.background,
     fillBackground: bool(o.fillBackground, d.fillBackground),
     pixelArt: bool(o.pixelArt, d.pixelArt),
+    svg: { colors: int(s.colors, 2, 64, d.svg.colors), detail: pick(s.detail, DETAILS, d.svg.detail) },
     stripExif: bool(o.stripExif, d.stripExif),
   };
 }

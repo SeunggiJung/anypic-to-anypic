@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // wrangler가 만드는 임시 번들
+    ".wrangler/**",
   ]),
 ]);
 

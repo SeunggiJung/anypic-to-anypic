@@ -1,6 +1,7 @@
 import { TRAITS, type FormatId } from "../../../formats";
 import { FORMAT_TEXT } from "./formats";
 import { PAIR_NOTES } from "./pairNotes";
+import { svgChanges, svgFaq, svgLeadSecond, svgWhen } from "./svgTarget";
 import {
   fullFormat,
   kindOf,
@@ -61,6 +62,8 @@ function sizeHint(from: FullFormat): string {
 }
 
 function buildChanges(pair: Pair): Change[] {
+  // 도착 형식이 SVG면 래스터를 도형으로 다시 그리는 트레이싱이라 전용 문단을 쓴다
+  if (pair.to === "svg") return svgChanges(full(pair.from));
   const from = full(pair.from);
   const to = full(pair.to);
   const fk = kindOf(from.id);
@@ -183,6 +186,7 @@ function buildChanges(pair: Pair): Change[] {
 }
 
 function buildWhen(pair: Pair): string[] {
+  if (pair.to === "svg") return svgWhen(full(pair.from));
   const from = full(pair.from);
   const to = full(pair.to);
   const out: string[] = [];
@@ -236,7 +240,10 @@ function buildLead(pair: Pair): string[] {
   else if (fromTr.appSupport <= 3) p1 += ` ${from.name}는 최신 브라우저에서는 열리지만 프로그램이나 서비스에 따라 지원이 고르지 않습니다.`;
   else p1 += ` ${from.name}는 대부분의 환경에서 열리지만 용도에 따라 ${to.name} 같은 다른 형식이 더 알맞을 수 있습니다.`;
 
-  const p2 = `${to.name}는 ${to.summary}입니다. ${from.name}${OBJ} ${to.name}${TO} 바꾸면 ${gainSummary(from, to)}`;
+  const p2 =
+    pair.to === "svg"
+      ? svgLeadSecond(from, to.summary)
+      : `${to.name}는 ${to.summary}입니다. ${from.name}${OBJ} ${to.name}${TO} 바꾸면 ${gainSummary(from, to)}`;
   const p3 = `이 변환기는 파일 내용을 읽어 ${from.name}가 맞는지 확인한 뒤 브라우저 안에서 바로 ${to.name}${TO} 바꿔 줍니다. 이미지는 서버로 전송되지 않습니다.`;
   return [p1, p2, p3];
 }
@@ -255,6 +262,7 @@ function gainSummary(from: FullFormat, to: FullFormat): string {
 }
 
 function buildFaq(pair: Pair, changes: Change[]): PairContent["faq"] {
+  if (pair.to === "svg") return svgFaq(full(pair.from));
   const from = full(pair.from);
   const to = full(pair.to);
   const fk = kindOf(from.id);

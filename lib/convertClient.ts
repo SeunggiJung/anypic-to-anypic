@@ -1,6 +1,7 @@
 import { computeLayout } from "./converters/size";
 import {
   ConvertError,
+  type ConvertNote,
   MAX_DIMENSION,
   type ConvertOptions,
   type ConvertRequest,
@@ -12,6 +13,7 @@ export interface ConvertResult {
   blob: Blob;
   width: number;
   height: number;
+  notes: ConvertNote[];
 }
 
 interface Task {
@@ -65,7 +67,7 @@ class Pool {
       slot.current = null;
       if (task && e.data.id === task.req.id) {
         const res = e.data;
-        if (res.ok) task.resolve({ blob: res.blob, width: res.width, height: res.height });
+        if (res.ok) task.resolve({ blob: res.blob, width: res.width, height: res.height, notes: res.notes });
         else task.reject(new ConvertError(res.code, res.message));
       }
       this.pump();
@@ -170,6 +172,8 @@ export async function convertFile(file: File, input: FormatId, options: ConvertO
     return pool.run("png", png, options);
   }
   if (input === "svg") {
+    // SVG는 이미 벡터다. 래스터로 그렸다가 다시 트레이싱하면 품질만 떨어지므로 막는다.
+    if (options.output === "svg") throw new ConvertError("svgSame");
     const png = await rasterizeSvg(file, options);
     // 원본 크기는 이미 맞춰 그렸다. Worker는 다시 줄이거나 늘리지 않고,
     // 직접 지정(fixed)이면 그 결과를 지정한 캔버스 가운데에 놓기만 한다 (여백·잘라내기).

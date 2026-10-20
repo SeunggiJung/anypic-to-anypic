@@ -1,6 +1,6 @@
 import type { FormatId } from "../formats";
 
-export type OutputFormat = Extract<FormatId, "png" | "jpg" | "webp" | "avif" | "gif" | "bmp" | "ico">;
+export type OutputFormat = Extract<FormatId, "png" | "jpg" | "webp" | "avif" | "gif" | "bmp" | "ico" | "svg">;
 
 /** original: 그대로 · width/height: 한쪽 기준(비율 유지) · percent: 비율(%) · fixed: 가로×세로를 직접 지정 */
 export type ResizeMode = "original" | "width" | "height" | "percent" | "fixed";
@@ -31,6 +31,16 @@ export interface ResizeOptions {
   alignY: Align;
 }
 
+/** SVG(벡터) 출력 옵션. 래스터 이미지를 트레이싱해서 만든다. */
+export type TraceDetail = "low" | "medium" | "high";
+
+export interface SvgOptions {
+  /** 사용할 색 수 (2~64) */
+  colors: number;
+  /** low: 경로를 줄여 단순·작게 / high: 디테일 보존·크게 */
+  detail: TraceDetail;
+}
+
 export interface ConvertOptions {
   output: OutputFormat;
   /** 1~100 (JPG/WebP/AVIF) */
@@ -40,6 +50,8 @@ export interface ConvertOptions {
   background: string;
   /** 투명을 지원하는 형식(PNG/WebP/GIF/ICO)에서도 투명 대신 배경색으로 채울지 */
   fillBackground: boolean;
+  /** 출력이 SVG일 때만 쓰인다 */
+  svg: SvgOptions;
   /** true면 확대·축소할 때 보간하지 않고 픽셀을 그대로 키우거나 줄인다 (도트/픽셀 아트용) */
   pixelArt: boolean;
   /** false면 JPG → JPG에서만 원본 EXIF를 유지 */
@@ -53,6 +65,7 @@ export const DEFAULT_OPTIONS: ConvertOptions = {
   background: "#ffffff",
   fillBackground: false,
   pixelArt: false,
+  svg: { colors: 8, detail: "medium" },
   stripExif: true,
 };
 
@@ -65,11 +78,19 @@ export interface ConvertRequest {
   options: ConvertOptions;
 }
 
+/** 변환 결과에 대해 사용자에게 알려야 할 주의사항 (SVG 트레이싱) */
+export type ConvertNote =
+  | { code: "svgPhotoLike" }
+  | { code: "svgDownscaled"; value: number }
+  | { code: "svgComplex"; value: number }
+  /** 결과 SVG가 원본보다 value배 크다 (변환 후 파일 크기를 비교해 클라이언트가 추가) */
+  | { code: "svgLarger"; value: number };
+
 export type ConvertResponse =
-  | { id: number; ok: true; blob: Blob; width: number; height: number }
+  | { id: number; ok: true; blob: Blob; width: number; height: number; notes: ConvertNote[] }
   | { id: number; ok: false; code: ConvertErrorCode; message?: string };
 
-export type ConvertErrorCode = "decode" | "encode" | "tooBig" | "tiff" | "unknown";
+export type ConvertErrorCode = "decode" | "encode" | "tooBig" | "tiff" | "svgSame" | "svgTooComplex" | "unknown";
 
 export class ConvertError extends Error {
   constructor(

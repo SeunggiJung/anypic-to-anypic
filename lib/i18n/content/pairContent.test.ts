@@ -20,9 +20,9 @@ function sentences(c: PairContent): Set<string> {
 }
 
 describe("랜딩 페이지 조합", () => {
-  it("입력 10종 × 출력 6종(AVIF 제외) − 동일 형식 6쌍 = 54개", () => {
-    expect(PAIRS).toHaveLength(54);
-    expect(new Set(PAIRS.map((p) => p.slug)).size).toBe(54);
+  it("입력 10종 × 출력 7종(AVIF 제외, SVG 포함) − 동일 형식 7쌍 = 63개", () => {
+    expect(PAIRS).toHaveLength(63);
+    expect(new Set(PAIRS.map((p) => p.slug)).size).toBe(63);
     expect(PAIRS.some((p) => p.to === "avif")).toBe(false);
     expect(PAIRS.some((p) => p.from === p.to)).toBe(false);
   });

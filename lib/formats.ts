@@ -74,7 +74,7 @@ export const FORMATS: Record<FormatId, ImageFormat> = {
   },
   svg: {
     id: "svg", name: "SVG", mime: "image/svg+xml", extensions: ["svg"],
-    input: true, output: false, hasQuality: false, transparency: true, animation: true, compression: "vector", year: 2001,
+    input: true, output: true, hasQuality: false, transparency: true, animation: true, compression: "vector", year: 2001,
   },
 };
 

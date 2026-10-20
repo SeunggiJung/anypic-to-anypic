@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FORMATS, OUTPUT_FORMATS } from "@/lib/formats";
 import type { OutputSupport } from "@/lib/converters/support";
-import type { OutputFormat } from "@/lib/converters/types";
+import type { ConvertNote, OutputFormat } from "@/lib/converters/types";
 import { downloadBlob, zipBlobs } from "@/lib/download";
 import type { FileItem } from "@/lib/fileItem";
 import type { Messages } from "@/lib/i18n";
@@ -27,6 +27,20 @@ function sizeChange(t: Messages, before: number, after: number): { text: string;
   return { text: t.result.same, tone: "text-muted" };
 }
 
+/** 변환 결과에 대해 사용자에게 알릴 주의사항 문구 */
+function noteText(t: Messages, note: ConvertNote): string {
+  switch (note.code) {
+    case "svgPhotoLike":
+      return t.resultNotes.svgPhotoLike;
+    case "svgDownscaled":
+      return t.resultNotes.svgDownscaled(note.value);
+    case "svgComplex":
+      return t.resultNotes.svgComplex(note.value);
+    case "svgLarger":
+      return t.resultNotes.svgLarger(note.value);
+  }
+}
+
 export default function ResultList({ items, output, support, onReconvert, onEditSettings, onStartOver }: Props) {
   const t = useT();
   const [zipping, setZipping] = useState(false);
@@ -37,6 +51,18 @@ export default function ResultList({ items, output, support, onReconvert, onEdit
     rootRef.current?.scrollIntoView({ block: "nearest" });
   }, []);
   const done = items.filter((i) => i.status === "done" && i.result);
+
+  // SVG 결과는 눈으로 확인할 수 있게 미리보기를 보여 준다 (결과 화면이 사라질 때 URL을 해제)
+  const previews = useMemo(
+    () =>
+      new Map(
+        output === "svg"
+          ? items.filter((i) => i.result).map((i) => [i.id, URL.createObjectURL(i.result!.blob)] as const)
+          : [],
+      ),
+    [items, output],
+  );
+  useEffect(() => () => previews.forEach((u) => URL.revokeObjectURL(u)), [previews]);
   const failed = items.filter((i) => i.status === "error" || i.status === "rejected");
 
   async function downloadAll() {
@@ -75,6 +101,12 @@ export default function ResultList({ items, output, support, onReconvert, onEdit
           const change = r ? sizeChange(t, item.file.size, r.blob.size) : null;
           return (
             <li key={item.id} className="flex flex-wrap items-center gap-3 p-3">
+              {previews.get(item.id) && (
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- blob URL이라 next/image 불가 */}
+                  <img src={previews.get(item.id)} alt="" className="h-full w-full object-contain" />
+                </div>
+              )}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium" title={r?.name ?? item.file.name}>
                   {r?.name ?? item.file.name}
@@ -90,6 +122,16 @@ export default function ResultList({ items, output, support, onReconvert, onEdit
                   </p>
                 )}
               </div>
+              {r && r.notes.length > 0 && (
+                <div role="note" className="order-last w-full rounded-lg border border-warning/60 bg-background p-3 text-xs">
+                  <p className="mb-1 font-bold text-warning">{t.resultNotes.title}</p>
+                  <ul className="list-disc space-y-1 pl-5 text-muted">
+                    {r.notes.map((n) => (
+                      <li key={n.code}>{noteText(t, n)}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {r && (
                 <button
                   type="button"

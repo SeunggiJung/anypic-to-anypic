@@ -9,8 +9,8 @@ const scope = self as unknown as {
 scope.onmessage = async (e) => {
   const req = e.data;
   try {
-    const { blob, width, height } = await convert(req);
-    scope.postMessage({ id: req.id, ok: true, blob, width, height });
+    const { blob, width, height, notes } = await convert(req);
+    scope.postMessage({ id: req.id, ok: true, blob, width, height, notes });
   } catch (err) {
     if (err instanceof ConvertError) {
       scope.postMessage({ id: req.id, ok: false, code: err.code, message: err.message });

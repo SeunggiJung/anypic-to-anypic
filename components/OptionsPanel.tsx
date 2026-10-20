@@ -1,7 +1,7 @@
 "use client";
 
 import { FORMATS } from "@/lib/formats";
-import type { Align, ConvertOptions, FitMode, ResizeMode } from "@/lib/converters/types";
+import type { Align, ConvertOptions, FitMode, ResizeMode, TraceDetail } from "@/lib/converters/types";
 import NumberField from "./NumberField";
 import { useT } from "./LangProvider";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,8 @@ interface Props {
   disabled?: boolean;
   /** 입력 중에 JPG가 있는지 (EXIF 유지 옵션 노출 조건) */
   hasJpgInput: boolean;
+  /** 입력 중에 사진인 경우가 많은 형식(JPG/HEIC/TIFF)이 있는지 (SVG 변환 경고용) */
+  hasPhotoInput: boolean;
   /** 모든 설정을 기본값으로 되돌린다 */
   onReset: () => void;
 }
@@ -32,7 +34,7 @@ const input = "rounded-md border border-border bg-background px-2 py-1.5 text-sm
 
 const ALIGN_VALUES: Align[] = [0, 0.5, 1];
 
-export default function OptionsPanel({ options, onChange, disabled, hasJpgInput, onReset }: Props) {
+export default function OptionsPanel({ options, onChange, disabled, hasJpgInput, hasPhotoInput, onReset }: Props) {
   const t = useT();
   const o = t.options;
   const fmt = FORMATS[options.output];
@@ -54,6 +56,13 @@ export default function OptionsPanel({ options, onChange, disabled, hasJpgInput,
     { id: "center", label: o.fitCenter, hint: o.fitCenterHint },
   ];
   const fitInfo = fits.find((f) => f.id === r.fit)!;
+  const isSvg = options.output === "svg";
+  const details: Array<{ id: TraceDetail; label: string }> = [
+    { id: "low", label: t.svg.detailLow },
+    { id: "medium", label: t.svg.detailMedium },
+    { id: "high", label: t.svg.detailHigh },
+  ];
+  const setSvg = (patch: Partial<ConvertOptions["svg"]>) => set({ svg: { ...options.svg, ...patch } });
 
   // 배경색: 투명 미지원 형식은 항상, 지원하는 형식은 "배경색으로 채우기"를 켰을 때
   const needsColor = !fmt.transparency || options.fillBackground;
@@ -215,8 +224,68 @@ export default function OptionsPanel({ options, onChange, disabled, hasJpgInput,
           </fieldset>
         )}
 
+        {/* SVG(벡터) 변환: 주의사항 + 설정 */}
+        {isSvg && (
+          <div role="note" className="space-y-4 rounded-lg border border-warning/60 bg-background p-4 sm:col-span-2">
+            <div>
+              <p className="flex items-center gap-2 text-sm font-bold text-warning">
+                <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3 2 21h20L12 3Z" />
+                  <path d="M12 10v5M12 18h.01" />
+                </svg>
+                {t.svg.noticeTitle}
+              </p>
+              <ul className="mt-2 list-disc space-y-1.5 pl-5 text-xs leading-relaxed text-muted">
+                {t.svg.notice.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+              {hasPhotoInput && <p className="mt-2 text-xs font-semibold text-warning">{t.svg.photoFormatHint}</p>}
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label htmlFor="opt-svg-colors" className="mb-1 flex justify-between text-sm font-medium">
+                  <span>{t.svg.colors}</span>
+                  <span className="tabular-nums text-muted">{options.svg.colors}</span>
+                </label>
+                <input
+                  id="opt-svg-colors"
+                  type="range"
+                  min={2}
+                  max={64}
+                  value={options.svg.colors}
+                  disabled={disabled}
+                  onChange={(e) => setSvg({ colors: Number(e.target.value) })}
+                  className="w-full accent-[var(--accent)]"
+                />
+                <p className="text-xs text-muted">{t.svg.colorsHint}</p>
+              </div>
+              <div>
+                <label htmlFor="opt-svg-detail" className="mb-1 block text-sm font-medium">
+                  {t.svg.detail}
+                </label>
+                <select
+                  id="opt-svg-detail"
+                  value={options.svg.detail}
+                  disabled={disabled}
+                  onChange={(e) => setSvg({ detail: e.target.value as TraceDetail })}
+                  className={input}
+                >
+                  {details.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-muted">{t.svg.detailHint}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 도트(픽셀 아트) 확대·축소 */}
-        {r.mode !== "original" && (
+        {r.mode !== "original" && !isSvg && (
           <label className="flex items-start gap-2 text-sm">
             <input
               type="checkbox"

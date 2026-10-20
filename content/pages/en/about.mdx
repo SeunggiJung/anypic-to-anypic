@@ -28,6 +28,7 @@ The browser's Canvas feature reads the image and redraws it into the format you 
 
 - Animated GIF and WebP files convert only their first frame. Multi-page TIFFs convert only the first page.
 - Sizes are set in pixels only. There is no resolution setting in inches or DPI, and no way to pick a specific region of the image to crop (cropping is always centered).
+- Converting PNG and other images to SVG isn't an exact copy; it is tracing (an estimate) that redraws areas of color as shapes. It suits logos and icons but not photos, text becomes shapes, and the file can end up larger than the original. The converter shows these cautions before you convert and again based on the result.
 - Saving as AVIF works only when your browser supports it. Where it doesn't, the button is disabled.
 - There is a per-file size limit (%MAX_MB%MB) because of browser memory. Very large images may fail while processing.
 - Color management (ICC profiles) follows the browser's default handling. If you need precise color conversion for print, use a professional editor.

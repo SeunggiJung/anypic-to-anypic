@@ -1,3 +1,4 @@
+import type { ConvertNote } from "./converters/types";
 import type { FormatId } from "./formats";
 
 export type ItemStatus = "ready" | "converting" | "done" | "error" | "rejected";
@@ -7,6 +8,8 @@ export interface ItemResult {
   name: string;
   width: number;
   height: number;
+  /** 사용자에게 알릴 주의사항 (SVG 트레이싱 등) */
+  notes: ConvertNote[];
 }
 
 export interface FileItem {
