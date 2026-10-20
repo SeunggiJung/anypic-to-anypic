@@ -1,0 +1,47 @@
+---
+title: Choosing the Resolution for SVG to PNG
+description: "SVG has no resolution, so you must choose a size when converting to PNG. How to keep it sharp, what happens with SVGs that have no size, and font problems."
+date: 2026-10-20
+tags: [SVG, PNG, resolution]
+related: [svg-to-png, svg-to-jpg, svg-to-ico]
+---
+
+When you convert an SVG to PNG, you get stuck on "how many pixels should I save it at?" That's because an SVG is stored as shapes and curves rather than pixels, so it has no original size. Here is how to decide the size.
+
+## Why do you have to choose a size?
+
+A PNG is an image with a fixed width and height in pixels. The moment you convert an SVG to PNG the resolution is fixed, and enlarging it later makes it blurry like any ordinary image. So it's safer to convert **a bit larger than the size you'll use**. Shrinking later is fine; enlarging isn't.
+
+## Choosing the size on this site
+
+The SVG is **drawn directly as a vector at the size you set** and then saved, so a large size stays sharp. That is different from making a small PNG first and enlarging it.
+
+- **Width (px)**: set only the width and the height follows the aspect ratio. This is the simplest.
+- **Height (px)** or **Scale (%)** also work.
+- **Set exact size (width × height)**: use it when you need an exact size, such as a square icon. If the SVG has a different ratio, "Keep ratio + fill the margins" centers it and leaves the rest transparent. For example, you can put a wide SVG into a 256×256 PNG.
+
+## When the SVG has no size information
+
+If the SVG file has no `width` and `height`, it is drawn **1024px wide** using the ratio of its `viewBox`. If there is no `viewBox` either, it is treated as a square. If you don't like the automatic size, set it yourself with the options above. Even an icon SVG written as small as 24×24 can become a large, sharp PNG once you set a size.
+
+## Transparent background
+
+The background of the result is **transparent** by default. If you need a white background, save as JPG and pick the background color, or in PNG turn on "Fill transparent areas and margins with the background color" and choose a color.
+
+## Common problems
+
+- **The text appears in a different font.** If the text in the SVG uses a font that isn't on the system, the browser substitutes another. An SVG with the text converted to outlines (paths) is the safest. Most vector editors have a "convert to outlines" feature.
+- **Linked external images or fonts are missing.** If the SVG is set up to load external files, they may not load while the SVG is drawn as an image. Embed the elements you need in the SVG when you save it.
+- **A complex SVG is slow.** Drawing a very complex SVG at a very large size can take a long time or fail. Up to 16384px on a side is supported, but set only what you need.
+
+## Suggested sizes by use
+
+There is no single right answer, but these are starting points.
+
+- Web logo: about twice the width it is displayed at (for high-density screens)
+- App or game icon: the size required by the platform's documentation (for example 512×512 or 1024×1024)
+- Favicon: a square of 256×256 or less; see the [favicon guide](/guides/make-favicon/)
+
+<ConvertLink to="svg-to-png">Convert SVG to PNG</ConvertLink>
+
+<ConvertLink to="svg-to-jpg">Convert SVG to JPG</ConvertLink>

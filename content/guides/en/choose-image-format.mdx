@@ -1,0 +1,65 @@
+---
+title: How to Choose an Image Format at a Glance
+description: "Which of JPG, PNG, WebP, AVIF, GIF, SVG and ICO should you use? Selection rules by purpose, backed by measured file-size comparisons."
+date: 2026-10-20
+tags: [image formats, comparison, guide]
+related: [png-to-jpg, jpg-to-webp, png-to-webp]
+---
+
+If there are too many image formats and you don't know which to use, follow the table and questions below. The history and detailed features of each format are on the [Formats](/formats/) pages.
+
+## Three questions to pick one
+
+1. **Do you need a transparent background?** If so, JPG and BMP are out. Choose among PNG, WebP, GIF, AVIF and SVG.
+2. **Is it a photo or graphics?** For photos, JPG, WebP and AVIF are smaller. For logos, text and screenshots, PNG is sharper.
+3. **Where will it be used?** What the recipient can open is the last criterion. When you aren't sure, JPG or PNG is the safe choice.
+
+## Recommendations by use
+
+| Use | Recommended | Why |
+| --- | --- | --- |
+| Sharing ordinary photos, email | JPG | Opens everywhere and is small |
+| Photos on a website | WebP (usually with a JPG fallback) | Smaller at the same quality |
+| Logos, icons, UI images | PNG or SVG | Sharp and supports transparency. SVG doesn't break when enlarged |
+| Screenshots, text-heavy images | PNG | JPG blurs around text |
+| Keeping editing originals | PNG (TIFF for photos too) | Lossless, so re-saving doesn't degrade |
+| Favicons, Windows icons | ICO (or PNG, SVG) | See the [favicon guide](/guides/make-favicon/) |
+| Short moving images | GIF or WebP | GIF plays everywhere; WebP is smaller |
+| Sharing iPhone photos | JPG | HEIC often won't open on Windows or the web |
+
+## How different is the file size?
+
+This is the same photo (1280×854) saved in several formats, with quality 90 for formats that have a quality setting.
+
+| Format | File size |
+| --- | --- |
+| WebP | 370KB |
+| JPG | 417KB |
+| GIF | 656KB |
+| PNG | 2.2MB |
+| BMP | 3.1MB |
+
+Measure an image with flat colors and a lot of text, such as a screenshot (1280×720), and the order changes.
+
+| Format | File size |
+| --- | --- |
+| WebP (quality 90) | 44KB |
+| JPG (quality 90) | 105KB |
+| PNG | 108KB |
+
+The best format depends on the kind of image, so for important images the most accurate approach is to convert to each candidate once and compare the sizes on the result screen. Closer comparisons are in [PNG vs JPG](/guides/png-vs-jpg/) and [WebP vs JPG](/guides/webp-vs-jpg/).
+
+## What to avoid
+
+- **BMP**: no compression, so the files are large. There's almost no reason to use it unless old equipment requires it.
+- **Saving photos as GIF**: the 256-color limit makes photos coarse and the files large.
+- **Converting JPG to PNG to improve quality**: information that is already lost doesn't come back.
+- **Re-saving JPG repeatedly**: degradation piles up with every save. Convert from the original only once.
+
+## If you're still not sure
+
+If you don't know what the recipient can open and you don't need transparency, choose **JPG**; if you need transparency, choose **PNG**. Then convert on this site, check the size of the result, and if you don't like it you can convert again to another format right away.
+
+<ConvertLink to="png-to-jpg">Convert PNG to JPG</ConvertLink>
+
+<ConvertLink to="jpg-to-webp">Convert JPG to WebP</ConvertLink>

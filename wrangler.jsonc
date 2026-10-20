@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Cloudflare Workers(정적 에셋)로 배포한다. `npm run build`가 만드는 out/ 폴더가 그대로 에셋이 된다.
+  "name": "anypic-to-anypic",
+  "compatibility_date": "2026-10-20",
+  "assets": {
+    "directory": "./out",
+    // 없는 주소는 가장 가까운 404.html(전역 404 페이지)을 404 상태로 돌려준다
+    "not_found_handling": "404-page",
+    // 이 사이트의 모든 주소는 슬래시로 끝난다(canonical, sitemap 기준).
+    // /ko/about → /ko/about/ 로 리다이렉트하고 /ko/about/ 을 제공한다
+    "html_handling": "force-trailing-slash"
+  }
+}

@@ -1,0 +1,68 @@
+---
+title: "Shrink Images for the Web: Size, Format, Quality"
+description: The order that shrinks images the most (size, format, quality), with measured numbers, and why lowering quality alone isn't the answer.
+date: 2026-10-20
+tags: [web optimization, file size]
+related: [png-to-webp, jpg-to-webp, png-to-jpg]
+---
+
+When a page is slow or an upload hits a size limit, most people lower the quality slider first. But there is a better order. This summary is based on measurements with the same photo (1280×854).
+
+## Step 1: Resize to the size you need
+
+The biggest way to cut file size is not to use an image larger than it appears on screen. Smartphone photos can be over 4000 pixels wide, while a blog's text column is usually around 800 pixels. All those pixels you can't even see are file size.
+
+| Setting | Width | File size |
+| --- | --- | --- |
+| JPG, quality 80, original size (1280×854) | 1280px | 298KB |
+| JPG, quality 80, width 800px | 800px | 118KB |
+
+We kept the quality the same and only reduced the width to 800 pixels, and the file shrank by more than 60%. Unless you need a double-size version for high-density (Retina) screens, match the display size. On this site, set the width in px under Size in the options and the aspect ratio is preserved.
+
+## Step 2: Pick a format that suits the image
+
+This is the same photo saved in different formats. 1280×854, with quality 90 for formats that have a quality setting.
+
+| Format | File size |
+| --- | --- |
+| JPG | 417KB |
+| WebP | 370KB |
+| GIF | 656KB |
+| PNG | 2.2MB |
+| BMP | 3.1MB |
+
+A photo saved as PNG is more than five times the JPG. If the photos on your website are PNG, changing the format alone is the easiest improvement. Conversely, for logos and screenshots with few colors and text, PNG is often smaller or similar, and converting to JPG blurs the text. A good rule: JPG or WebP for photos, PNG or WebP for transparent backgrounds and simple graphics. The difference between the two is covered further in [WebP vs JPG](/guides/webp-vs-jpg/).
+
+## Step 3: Adjust quality last
+
+If you want to shrink further after fixing the size and format, that's when you touch quality.
+
+| JPG quality | File size |
+| --- | --- |
+| 95 | 556KB |
+| 90 | 417KB |
+| 80 | 298KB |
+| 60 | 202KB |
+
+Going from 95 to 80 nearly halves the file. For photos, 80-85 usually still looks fine to the eye, and below 60, blocky patterns start to appear in smooth areas such as the sky. These numbers come from a single image, so for important images check the result's size and actual quality by eye.
+
+<Callout title="Recompress only once">
+Saving a JPG as a JPG again cuts quality once more. Reduce from the original in a single pass if you can, and avoid shrinking an already shrunk file again.
+</Callout>
+
+## Step 4: Remove information you don't need
+
+Camera photos carry EXIF data such as the device, time and location. It isn't big in file size, but it matters for privacy. Results from this site don't include that information by default.
+
+## Summary: the priority order
+
+1. Resize to the displayed size. This has the biggest effect.
+2. Save photos as JPG or WebP. PNG photos shrink a lot just by changing the format.
+3. Start quality at 80-85 and lower it if needed.
+4. Check the result's size and actual quality.
+
+You can add many files at once, convert them with the same settings and download them as a ZIP.
+
+<ConvertLink to="png-to-webp">Convert PNG to WebP</ConvertLink>
+
+<ConvertLink to="png-to-jpg">Convert PNG to JPG</ConvertLink>

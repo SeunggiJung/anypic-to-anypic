@@ -1,0 +1,49 @@
+---
+title: How to Remove Location Data (EXIF) from Photos
+description: "Photo files can hide where, with what and when they were taken. What EXIF is, how to remove it before you share, and how to check that it's gone."
+date: 2026-10-20
+tags: [EXIF, privacy, photos]
+related: [heic-to-jpg, png-to-jpg, jpg-to-webp]
+---
+
+When you post photos on resale sites or communities, you may have heard that "location data can go with them." This guide explains what that data is and how to remove it.
+
+## What is EXIF?
+
+EXIF is extra information (metadata) saved inside a photo file. You can't see it in the picture, but it is in the file. It usually includes things like:
+
+- The date and time it was taken
+- The camera or smartphone model, lens details and shooting settings such as exposure
+- **The shooting location (GPS coordinates)**, when the camera app's location setting is on
+- The orientation (rotation) of the photo
+
+Location data in particular needs care: a photo taken near your home or workplace and posted as it is can reveal where that is. Some services remove this information automatically when you upload, but not all do, and policies can change, so removing it yourself before uploading is safer.
+
+## This site removes it by default
+
+This converter redraws the image and saves a new file, so **the converted result doesn't contain EXIF.** That is true for whichever format you convert to. When we converted a JPG that had a location string in it, the result with default settings had no EXIF entry at all.
+
+So to remove location data, just upload the photo and convert it. Converting to the same JPG works too (JPG → JPG, quality 90 or higher recommended).
+
+<ConvertLink to="heic-to-jpg">Convert HEIC to JPG</ConvertLink>
+
+### What about the rotation?
+The EXIF rotation isn't discarded; it is applied to the photo itself. A photo taken in portrait does not end up lying on its side after conversion.
+
+## If you want to keep it on purpose
+
+You may want to keep shooting information for photo management. **Only when converting JPG to JPG**, turning off the "Remove camera info (EXIF)" option copies the original's EXIF to the result. The rotation has already been applied to the photo, so it is handled to avoid rotating twice. Converting to any other format never includes it. This option also keeps location data, so don't turn it on for photos you're going to post.
+
+## How to check that it's gone
+
+- **Windows**: right-click the file, choose Properties, then the Details tab, and see whether items such as GPS and camera model are empty.
+- **Mac**: in Preview, open Tools, then Show Inspector, and look at the EXIF and GPS tabs.
+- **Smartphone**: open the photo's info (i) screen in the Photos app and see whether a location is shown.
+
+Compare the file before and after conversion side by side and the difference is clear.
+
+## Still be careful
+
+Even without EXIF, **what is visible in the photo** (signs, buildings, scenery, text on documents) can reveal a place. Screenshots and images made by some apps often have no EXIF to begin with. Check the visible content of sensitive photos before you share them.
+
+Also, this site converts in your browser without sending files to a server, so there's no worry that the original with location data gets passed elsewhere while you upload it to clean it. How to check that is in [How to verify your photos aren't uploaded](/guides/verify-no-upload/).

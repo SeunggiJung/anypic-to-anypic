@@ -1,0 +1,47 @@
+---
+title: How to Convert Many Images at Once
+description: "Drop dozens of images in mixed formats, convert them all to the same format and size in one go, and download a ZIP. Plus what to know about batch conversion."
+date: 2026-10-20
+tags: [batch conversion, ZIP, workflow]
+related: [heic-to-jpg, png-to-webp, jpg-to-webp]
+---
+
+With a site that converts one image at a time, a folder of thirty images means repeating the same steps thirty times. This site was built from the start to handle many files in one go.
+
+## The basic flow
+
+1. **Select all the images in a folder and drag them in together.** You can also click to choose several, or paste an image copied to the clipboard with Ctrl+V.
+2. Choose the output format.
+3. Set options such as quality, size and background color. **The same settings apply to every file.**
+4. Press Convert, and when it finishes press **Download all as ZIP**.
+
+## Mixed formats are fine
+
+Even if you drop PNG, JPG, WebP, HEIC, TIFF and SVG files together, the format of each file is detected separately and handled accordingly. Files with a wrong extension are processed by their real format, and the list tells you which ones they were. If an unsupported file is mixed in, only that file is marked as an error in the list and the rest convert normally.
+
+## Matching sizes at the same time
+
+Choose **Set exact size (width × height)** under Size to bring images of mismatched sizes to one spec. For images with different ratios you can pick stretching or squashing, centering with the leftover area filled, or filling the frame and cropping. Unifying images for a game is covered in detail in [Unify Image Sizes for Games](/guides/unify-image-size-for-games/).
+
+## What to know about the ZIP
+
+- Result files **keep their original names**, and only the extension changes (for example `photo.heic` → `photo.jpg`).
+- If files from different folders share a name, numbers are added inside the ZIP, such as `photo (2).jpg`.
+- The size before and after, and the change, are shown for each file so you can see where the effect is largest.
+- You can also download files one by one with each file's **Download** button.
+
+## Limits and tips
+
+- Each file can be up to **50MB**. There is no limit on the number of files, but browser memory is finite, so adding a very large number at once can slow things down. For hundreds of files, splitting them up is more stable.
+- Files are processed a few at a time in parallel, and conversion runs on separate worker threads, so the page doesn't freeze while it works.
+- **If HEIC files are mixed in**, the first one takes a few extra seconds while the decoder is downloaded. After that they are processed quickly.
+- Large TIFFs and very large images can fail while processing because of memory. Failed files are shown in the list and don't affect the rest.
+- Animated GIF and WebP files convert only their first frame.
+
+## If you repeat the same job
+
+Your last format, quality and size settings are remembered in this browser, so you can start from the same settings next time. They are stored only on this device. To go back to the defaults, press "Reset settings" above the options.
+
+<ConvertLink to="heic-to-jpg">Convert HEIC to JPG</ConvertLink>
+
+<ConvertLink to="png-to-webp">Convert PNG to WebP</ConvertLink>

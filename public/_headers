@@ -1,0 +1,9 @@
+# Cloudflare Pages 용 응답 헤더 (Vercel은 vercel.json 사용)
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# 해시가 붙은 정적 파일은 영구 캐시
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable

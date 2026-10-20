@@ -1,0 +1,70 @@
+---
+title: "Unify Image Sizes for Games: Mixed Sizes in One Pass"
+description: How to bring images from different sources, with mismatched sizes, ratios and formats, to one spec (for example transparent 256×256 PNGs) in a single batch.
+date: 2026-10-20
+tags: [game development, resize, specs]
+related: [jpg-to-png, webp-to-png, png-to-ico]
+---
+
+When you build a game you pull images from many places into one project. One is a 512×512 PNG, another is a wide JPG, another is a WebP. Your engine wants one size and one format, and fixing them one by one in an image editor takes a while. This guide shows how to bring **many images to one spec at once** on this site.
+
+## Decide the spec first
+
+Settle three things before you start and you won't get confused.
+
+- **Format**: PNG (or WebP) for characters, icons and UI images that need transparency. JPG for backgrounds and photos that don't need transparency and where file size matters.
+- **Size**: Choose by purpose, for example 256×256 for icons and 64×64 for tiles. Many engines recommend power-of-two sizes (64, 128, 256, 512, 1024), and block-compressed textures often require sizes that are multiples of 4, so check your engine's documentation.
+- **What to do with originals of a different ratio**: Pick one of the fit methods below. This choice affects the quality of the result the most.
+
+## The steps to one spec
+
+1. Drop all the images in together. Mixed formats are fine; the real format of each file is detected automatically.
+2. Choose the output format (for example PNG).
+3. Under Size in the options, choose **Set exact size (width × height)** and enter the width and height in px. Common sizes are one click away as buttons.
+4. Choose **How to fit** and **Image position**.
+5. Convert, then download everything as a ZIP. File names keep their original names and only the extension changes.
+
+## Four ways to fit, and when to use each
+
+Suppose you're making a 256×128 image into 256×256.
+
+| Method | Result | Use it when |
+| --- | --- | --- |
+| Keep ratio + fill the margins | Image unchanged, 64px of empty space above and below | Sprites, icons and logos whose **shape must not change** |
+| Stretch or squash to fit | Stretched to twice the height, so it looks distorted | The original already has that ratio, or distortion doesn't matter (such as some textures) |
+| Keep ratio + fill the frame | Sides are cropped and the square is completely filled | Backgrounds, thumbnails and card art that **must have no gaps** |
+| Keep original size + center | No scaling; placed in the middle (cropped if the canvas is smaller) | You only want to **widen the canvas** of an image that is already the right size |
+
+When we converted a 256×128 image to 256×256 with "Keep ratio + fill the margins" and checked the result, the image sat unchanged from the 64th row to the 191st row, with transparency above and below.
+
+### Transparent margins or a color?
+PNG, WebP, GIF and ICO keep margins **transparent**. JPG and BMP can't represent transparency, so margins are filled with the **background color** (white by default). If you want margins filled with a color in PNG too, turn on "Fill transparent areas and margins with the background color" and pick one. Game images that need transparency must be saved as PNG, not JPG.
+
+### Image position
+The default is the center, but you can change it on the 3×3 grid. For example, with character sprites set to **bottom alignment**, characters of different sizes get their feet on the same line. When filling the frame, the side opposite your alignment is the one that gets cropped. Aligning a portrait to the top when cropping helps keep faces from being cut off.
+
+## Take care with pixel art
+
+Ordinary scaling smoothly interpolates between pixels. That is great for photos, but enlarging pixel art blurs the edges and loses the pixel look. In that case turn on **"Pixel art: scale without smoothing"**. It enlarges pixels as they are, without interpolation, so edges stay sharp. It looks cleanest with **whole-number scales**, such as 16×16 to 64×64; with other scales some pixels can look wider than others.
+
+<Callout title="Enlarging doesn't add resolution">
+Stretching a small image doesn't create detail that wasn't there. If you plan to use a photo or illustration large, it's better to shrink from the largest original you have. SVG is the exception: as a vector it is drawn sharply at the target size.
+</Callout>
+
+## Making icons (ICO)
+
+An ICO is at most 256px on a side. If you set something larger, such as 512×512, it is still saved at 256×256 or smaller with the aspect ratio kept. For a Windows game icon or a web favicon, the simple route is to make a 256×256 square PNG first and then convert it to ICO.
+
+## Your settings are remembered
+
+Your last format, size, fit method, position and other options are remembered in this browser, so you don't have to pick them again when you keep working to the same spec. To go back to the defaults, press "Reset settings" at the top of the options. Settings are stored only in this device's browser and are never sent to a server.
+
+## Limits to know
+
+- Sizes are set in px only. There is no resolution setting in inches or DPI.
+- Cropping only lets you choose the alignment position (nine cells); you can't pick an arbitrary region of the image to crop.
+- Animated GIF and WebP files convert only their first frame. A sprite sheet (many frames in one image) is treated as a single image, so decide the size with the frame scale in mind.
+
+<ConvertLink to="jpg-to-png">Convert JPG to PNG</ConvertLink>
+
+<ConvertLink to="webp-to-png">Convert WebP to PNG</ConvertLink>

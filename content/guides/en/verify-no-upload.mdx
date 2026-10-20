@@ -1,0 +1,49 @@
+---
+title: How to Check That Your Photos Aren't Uploaded
+description: "Don't just trust 'converted only in the browser'. Verify it yourself with the developer tools' Network tab and an offline test."
+date: 2026-10-20
+tags: [privacy, security, verification]
+related: [heic-to-jpg, png-to-jpg, jpg-to-webp]
+---
+
+Most image-conversion sites upload your file to a server, convert it there and send the result back. This site says that "all conversion happens inside the browser and files are never sent to a server." But a claim like that shouldn't ask to be believed; it should be something you can **check yourself**. Here are ways anyone can do it.
+
+## Method 1: Look at the Network tab
+
+Your browser's developer tools record every request a page makes. If a file were going somewhere, it would show up there. (These steps are for Chrome and Edge.)
+
+1. Open this site and press **F12** to open the developer tools.
+2. Choose the **Network** tab. Clear the requests already shown with the trash-can icon (Clear).
+3. Add an image and convert it.
+4. Look at the **Method** column in the list. A request that sends a file to a server is usually a `POST` or `PUT`. You can turn on the **Fetch/XHR** filter if you like.
+5. Check the request size too. If a file were uploaded, an amount of data about the size of the file would be transferred.
+
+When we converted a 1280×720 image to JPG while recording every request, there were **0** `POST`, `PUT` or `PATCH` requests, and no request carried a body. All you see are `GET` requests that fetch the site's pages and scripts, and `HEAD` requests that preload links.
+
+<Callout title="What are the requests you see at first?">
+You may see requests that fetch the site's own files (pages and scripts), and a request for the script that does the conversion (the Worker) the first time you convert. The first time you convert a HEIC file, the decoder script is downloaded too. These fetch the site's **code**; none of it is your file going out. When ads are turned on, you may also see requests to advertising-service domains, but they do not include your image content.
+</Callout>
+
+## Method 2: Convert while offline
+
+A site that has to send your file to a server stops working when the internet is cut.
+
+1. Open this site and **convert an image once**. (This is so the processing script has been downloaded.)
+2. In the developer tools' Network tab choose **Offline**, or turn off Wi-Fi.
+3. Without refreshing, add another image and convert it.
+
+Images still convert normally offline. When we tried it ourselves, converting a PNG to WebP offline on the same page worked. Note that if you refresh or move to another page, the site itself can't load, so test with the page left open.
+
+## Method 3: Understand the structure
+
+This site is a **static site with no server-side code**. There is no server program to receive and process your images; the visitor's browser does all the conversion. It happens with the browser's own image-handling feature (Canvas) and a separate worker thread (Web Worker). Formats browsers can't read, such as HEIC and TIFF, are decoded inside the browser with downloaded code.
+
+## What this site does store
+
+It doesn't store files, but for convenience it saves **settings** in this browser: theme, language and your last conversion options. These values stay in your device's browser (localStorage) and are not sent to a server. You can see the stored items in the developer tools' Application tab, and clearing site data removes them. Details are in the [Privacy Policy](/privacy/).
+
+## Using these checks elsewhere
+
+The checks above work for other converters and editing tools as well. Before converting sensitive photos (ID cards, documents, personal pictures), look at the Network tab to see whether a `POST` request appears. If an upload does happen, check that service's policy on how long it keeps files before you use it.
+
+<ConvertLink to="heic-to-jpg">Convert HEIC to JPG</ConvertLink>

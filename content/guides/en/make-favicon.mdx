@@ -1,0 +1,54 @@
+---
+title: "How to Make a Favicon: ICO, PNG or SVG?"
+description: "How to make a website favicon from one image, how to choose between ICO, PNG and SVG, which sizes to use, and how to link it in your HTML."
+date: 2026-10-20
+tags: [favicon, ICO, website]
+related: [png-to-ico, svg-to-ico, jpg-to-ico]
+---
+
+A favicon is the small icon shown in browser tabs, bookmarks and search results. One image is enough to make it, but choosing the wrong format or size can make it blurry or invisible.
+
+## What kind of image works
+
+- It should be **square**. If the aspect ratio differs, this site keeps the ratio, centers the image and leaves the leftover area transparent.
+- A **simple shape** is best. It is shown very small, as little as 16×16 in some places, so text-heavy or detailed images become unreadable. Bold shapes or one or two letters stay recognizable.
+- Start from a **large original** if you can (for example 512×512 or more). Shrinking a large image is fine; enlarging a small one makes it blurry.
+
+## Formats: ICO, PNG, SVG
+
+| Format | Notes |
+| --- | --- |
+| ICO | The traditional favicon format. Recognized even in older environments such as Windows shortcut icons. At most 256px on a side |
+| PNG | Current browsers also accept PNG favicons. Supports transparency |
+| SVG | A vector, so it's sharp at any size and the file is small. Some environments don't support it, so it's safer to ship an ICO or PNG alongside |
+
+To have your favicon appear in Google Search results, check the conditions in Google's documentation (square, a size that is a multiple of 48px, and so on). A size that is a multiple of 48 is fine.
+
+## Steps on this site
+
+1. Upload your logo image (PNG, JPG, SVG and so on). The format is detected automatically.
+2. Choose **ICO** as the output. If the original is larger than 256px, it is scaled down to 256px or smaller with the aspect ratio kept.
+3. If you want to fix the size, choose **Set exact size** in the Size option and pick a square (for example 128×128). Originals that aren't square are centered with "Keep ratio + fill the margins".
+4. Rename the downloaded file to `favicon.ico` and put it at the top level of your site.
+
+For reference, this site's own favicon was also made by converting an SVG logo to ICO with this converter. The ICO this site makes holds **one image at one size**. There is no feature to bundle several sizes (16, 32, 48 and so on) into one file. Current browsers scale larger images themselves, so this is fine in most cases.
+
+## Linking it in HTML
+
+Link it in your site's `head` like this, changing the paths to wherever your files are.
+
+```html
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+```
+
+`apple-touch-icon` is the icon used when someone adds your site to an iPhone home screen, and a 180×180 PNG is usually recommended. Transparent areas can appear black, so it's best to make it a PNG with a filled background. On this site, save as PNG, set the size to 180×180 and turn on "Fill transparent areas and margins with the background color".
+
+## Checking it
+
+Browsers cache favicons heavily, so you may still see the old icon after changing it. Check with a hard refresh or in a private window.
+
+<ConvertLink to="png-to-ico">Convert PNG to ICO</ConvertLink>
+
+<ConvertLink to="svg-to-ico">Convert SVG to ICO</ConvertLink>

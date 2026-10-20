@@ -1,0 +1,58 @@
+---
+title: "WebP vs JPG: Differences and Which to Use"
+description: How WebP and JPG differ in compression, transparency and compatibility, with measured file-size comparisons and advice on which to choose for each situation.
+date: 2026-10-20
+tags: [WebP, JPG, comparison]
+related: [webp-to-jpg, jpg-to-webp]
+---
+
+Sometimes the image you save from a website turns out to be `.webp`, or a speed-test tool tells you to switch to WebP. Both formats store photos in small files, but they are used differently.
+
+## The key differences
+
+| | JPG | WebP |
+| --- | --- | --- |
+| Introduced | 1992 | 2010 |
+| Compression | Lossy | Lossy and lossless |
+| Transparent background | No | Yes |
+| Animation | No | Yes |
+| Where it opens | Nearly every program and service | Mostly modern browsers; some programs don't support it |
+
+JPG has no transparent background and loses a little quality each time you save, but its overwhelming strength is that it opens everywhere. WebP can be smaller at the same quality and supports transparency, but older programs and upload forms sometimes reject it.
+
+## How different is the file size?
+
+Google says WebP is roughly 25-35% smaller than JPG at the same quality. What does it look like in practice? We saved one 1280×854 photo with this site's converter at the same quality numbers and compared.
+
+| Quality | JPG | WebP | Difference |
+| --- | --- | --- | --- |
+| 90 | 417KB | 370KB | about 11% smaller |
+| 80 | 298KB | 264KB | about 11% smaller |
+| 60 | 202KB | 194KB | about 4% smaller |
+
+This is one photo, so it varies by image. Two points stand out. First, the encoders for the two formats behave differently, so the same quality number doesn't mean the same visual quality. Second, the gap shrank as quality dropped. Savings of tens of percent come when the image content and settings suit it well.
+
+## When a transparent background matters
+
+Images such as logos and icons that need a transparent background can't be saved as JPG. That leaves PNG and WebP. WebP keeps transparency and is usually smaller than PNG, which suits web graphics. If you must convert a transparent WebP to JPG, the transparent areas are filled with a background color, so pick one that fits where it will be used.
+
+## Recommendations by situation
+
+- **Photos for a website:** WebP. Smaller files make pages load faster. If you must support very old browsers, keep a JPG as a fallback.
+- **Email attachments, messenger transfers, certificates and documents:** JPG. It has the lowest risk of the recipient being unable to open it.
+- **Uploading to a blog or shop admin screen:** Check the allowed formats first. If WebP is refused, convert to JPG.
+- **Originals you'll edit:** Re-saving as JPG or WebP many times piles up degradation, so it's safer to keep the original in a lossless format such as PNG.
+
+<Callout title="A caution when converting">
+Converting JPG to WebP, or WebP to JPG, compresses an already lossy image again. Keep the quality at 85-90 or higher and, if possible, convert from the original only once.
+</Callout>
+
+## Try it now
+
+Both directions are processed in your browser and your file is never uploaded.
+
+<ConvertLink to="webp-to-jpg">Convert WebP to JPG</ConvertLink>
+
+<ConvertLink to="jpg-to-webp">Convert JPG to WebP</ConvertLink>
+
+You can read more about each format's history and features on the [WebP](/formats/webp/) and [JPG](/formats/jpg/) pages.

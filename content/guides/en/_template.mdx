@@ -1,0 +1,32 @@
+---
+# This file starts with `_` so it is not published. Copy it to start a new post.
+# The file name becomes the address: content/guides/en/my-post.mdx → /en/guides/my-post/
+# Keep the same file name (slug) in every language folder so the language switcher links match.
+# If the title or description contains a colon, wrap it in double quotes (YAML rule; avoids a build error).
+title: Post title (shown in search results, around 50 characters)
+description: One or two sentences for the search result description (around 150 characters)
+date: 2026-01-01
+# updated: 2026-02-01
+tags: [HEIC, conversion]
+# Conversion pages to link as "Convert now" buttons at the end of the post (for example heic-to-jpg)
+related: [heic-to-jpg]
+# draft: true  ← uncomment for a draft. It stays out of lists and the sitemap.
+---
+
+Opening paragraph: start from the situation the reader arrived in.
+
+## Headings start with `##`
+
+Body text. With four or more headings, an ad slot is inserted automatically in the middle of the post.
+
+<Callout title="Good to know">
+Notes and cautions can be highlighted like this.
+</Callout>
+
+| Item | A | B |
+| --- | --- | --- |
+| Tables work too | value | value |
+
+<ConvertLink to="heic-to-jpg">Convert HEIC to JPG</ConvertLink>
+
+> MDX caution: writing a `<` or a curly brace character as plain text is parsed as code and breaks the build. Wrap it in backticks if you need it.

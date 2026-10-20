@@ -1,0 +1,41 @@
+---
+title: About
+heading: "About %SITE_NAME%"
+description: "%SITE_NAME% is a free image converter born from the hassle of matching image formats in game development. Why it was built and how it works."
+---
+
+%SITE_NAME% is a free image converter: upload any image file and it detects the format by itself and converts it to the format you want. As the name says, the goal is to turn any pic into any other pic format.
+
+## Why I built it
+
+Hi, I'm the solo developer who built and runs this site. I'm developing a game. In game development you constantly pull in images from elsewhere, but you can't get every image you need from one place, and images gathered from different sources come in different specs, file formats and resolutions. To unify them, I had to open a program or go hunting for a file-conversion site every time. Every pair of formats seemed to have its own site, and many of them took one file at a time, which was a real pain.
+
+So it started from the thought, "I wish there were one site that does all of this at once." You drop files without choosing a format and it is detected for you, many files are converted with the same settings in one go, sizes can be matched too, and everything comes back as a ZIP. That is exactly the tool I needed, so I built it. I hope it also helps anyone who has been stuck on image formats, whether for game development, a blog, an online shop or design work.
+
+## What makes this site different
+
+- **You never pick the input format.** We read the first bytes of the file rather than trusting its extension to find the real format. A file named .jpg that is actually a PNG is handled correctly, and we tell you when the two differ.
+- **Many files at once, with sizes unified.** Drop files of mixed formats and sizes together, convert them to one format, set the exact width and height in px to match one spec, and download them as a ZIP. For images with different aspect ratios you can stretch or squash them, center them and fill the leftover area with transparency (or a color you choose), or fill the frame and crop the overflow.
+- **Your files are never uploaded.** All conversion happens inside the visitor's browser. Nothing is sent to a server, so there is no worry about the images you're working on being stored somewhere, and no waiting for an upload.
+- **No sign-up, no install.** Open it and drop your files.
+- **We show the before and after.** After converting, we show how much the file size shrank (or grew). The differences between formats are explained in [Formats](/formats/) and [Guides](/guides/).
+
+## How does it work?
+
+The browser's Canvas feature reads the image and redraws it into the format you choose. Formats browsers can't read directly, such as iPhone photos (HEIC) and TIFF, are decoded with WebAssembly and JavaScript decoders. Heavy work runs in a separate worker thread (Web Worker) so the page never freezes. EXIF data such as shooting location is removed by default during conversion.
+
+## Honest limits
+
+- Animated GIF and WebP files convert only their first frame. Multi-page TIFFs convert only the first page.
+- Sizes are set in pixels only. There is no resolution setting in inches or DPI, and no way to pick a specific region of the image to crop (cropping is always centered).
+- Saving as AVIF works only when your browser supports it. Where it doesn't, the button is disabled.
+- There is a per-file size limit (%MAX_MB%MB) because of browser memory. Very large images may fail while processing.
+- Color management (ICC profiles) follows the browser's default handling. If you need precise color conversion for print, use a professional editor.
+
+## Operation and ads
+
+%SITE_NAME% is run personally by a game developer. The service is free, and to cover running costs some pages may show ads. Ads are never placed near the convert buttons, and the cookies related to advertising are explained in the [Privacy Policy](/privacy/).
+
+## Contact
+
+For bug reports, formats or features you'd like, or suggestions, please use the [contact page](/contact/). Telling us the format of the file that caused the problem and the browser you use helps us check faster.

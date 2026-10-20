@@ -1,0 +1,64 @@
+---
+title: "PNG vs JPG: Which Should You Save As?"
+description: "We saved a photo and a screenshot-like image as both PNG and JPG and compared file sizes. PNG isn't always bigger, and here is how to choose by use."
+date: 2026-10-20
+tags: [PNG, JPG, comparison]
+related: [png-to-jpg, jpg-to-png]
+---
+
+"JPG for photos, PNG for logos" is mostly right, but if you follow it without knowing why, you lose out on the exceptions. We saved the same images in both formats and compared the file sizes.
+
+## The key differences
+
+| | PNG | JPG |
+| --- | --- | --- |
+| Compression | Lossless (pixels stay exactly the same when saved) | Lossy (drops less important information) |
+| Transparent background | Yes | No |
+| Re-saving | Same no matter how many times | Loses a little quality each time |
+| Best for | Flat colors, text, lines, logos, screenshots | Photos where colors change continuously |
+
+## Measured file sizes
+
+We saved a **photo** (1280×854) in both formats.
+
+| Format | File size |
+| --- | --- |
+| PNG | 2.2MB |
+| JPG quality 95 | 556KB |
+| JPG quality 90 | 417KB |
+| JPG quality 80 | 298KB |
+
+For the photo, PNG was more than five times the size of JPG at quality 90. A photo whose colors flow smoothly has little to remove when it is saved losslessly.
+
+We also measured a **screenshot-like image**: a 1280×720 image we made to look like a settings screen, with flat-color backgrounds and text.
+
+| Format | File size |
+| --- | --- |
+| PNG | 108KB |
+| JPG quality 95 | 128KB |
+| JPG quality 90 | 105KB |
+| JPG quality 80 | 83KB |
+| WebP quality 90 | 44KB |
+
+This time **PNG was smaller than JPG at quality 95**, and about the same as quality 90. PNG compresses large areas of the same color well. JPG also leaves blocky blur around text, so for an image with text, PNG is the sharper choice when the sizes are similar. These numbers come from a single image each and vary with content.
+
+## How to choose
+
+- **Photos and images with many gradients** → JPG (start at quality 80-90). Consider WebP too if size matters.
+- **Logos, icons, UI, screenshots and text-heavy images** → PNG. If you need a transparent background, there is no real choice.
+- **Originals you'll edit several times** → Keep them as PNG and export only the final result as JPG. Re-saving JPG over and over piles up degradation.
+- **Email or upload size limits** → Converting photos to JPG shrinks them a lot. When converting a PNG that has transparency, pick a background color.
+
+<Callout title="Good to know when converting">
+Transparent areas are filled with the background color (white by default). If the image will be used on a dark screen, pick a matching color. In the other direction, converting JPG to PNG doesn't improve quality or make the background transparent.
+</Callout>
+
+## Try it now
+
+The result screen shows the size before and after conversion, so you can check which is smaller for your own image.
+
+<ConvertLink to="png-to-jpg">Convert PNG to JPG</ConvertLink>
+
+<ConvertLink to="jpg-to-png">Convert JPG to PNG</ConvertLink>
+
+You can read more on the [PNG](/formats/png/) and [JPG](/formats/jpg/) format pages.
