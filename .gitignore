@@ -49,3 +49,6 @@ next-env.d.ts
 # Cloudflare Wrangler
 .wrangler/
 .dev.vars*
+
+# e2e 샘플(내려받아 생성)
+e2e/samples/

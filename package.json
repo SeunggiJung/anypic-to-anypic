@@ -10,7 +10,8 @@
     "test": "vitest run",
     "seo:audit": "node scripts/seo-audit.mjs",
     "cf:preview": "npm run build && wrangler dev",
-    "cf:deploy": "npm run build && wrangler deploy"
+    "cf:deploy": "npm run build && wrangler deploy",
+    "e2e": "node e2e/run-all.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.3",
@@ -33,6 +34,7 @@
     "@types/utif": "^3.0.6",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
+    "playwright-core": "^1.64.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.5",

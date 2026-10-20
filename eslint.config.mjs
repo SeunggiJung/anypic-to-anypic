@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // wrangler가 만드는 임시 번들
     ".wrangler/**",
+    // Node에서 직접 실행하는 브라우저 테스트 스크립트
+    "e2e/**",
   ]),
 ]);
 
