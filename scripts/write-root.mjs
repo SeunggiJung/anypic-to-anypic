@@ -35,6 +35,19 @@ location.replace("/"+t+"/"+location.search+location.hash)})();`;
 
 const links = LOCALES.map((l) => `<li><a href="/${l}/" hreflang="${LOCALE_META[l].htmlLang}" lang="${LOCALE_META[l].htmlLang}">${LOCALE_META[l].label}</a></li>`).join("");
 
+// 검색엔진·애드센스 소유 확인 태그. 확인 도구는 사이트 루트(/)를 검사하므로 /ko/ 등과 같은 태그를 여기에도 넣어야 한다.
+// (값은 app/[lang]/layout.tsx가 쓰는 것과 같은 환경 변수)
+const esc = (v) => v.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const verification = [
+  ["google-site-verification", process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION],
+  ["naver-site-verification", process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION],
+  ["msvalidate.01", process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION],
+  ["google-adsense-account", process.env.NEXT_PUBLIC_ADSENSE_CLIENT],
+]
+  .filter(([, value]) => value)
+  .map(([name, value]) => `<meta name="${name}" content="${esc(value)}">`)
+  .join("\n");
+
 const html = `<!doctype html>
 <html lang="${LOCALE_META[DEFAULT_LOCALE].htmlLang}">
 <head>
@@ -44,6 +57,7 @@ const html = `<!doctype html>
 <meta name="robots" content="noindex,follow">
 <link rel="canonical" href="${SITE}/${DEFAULT_LOCALE}/">
 ${alternates}
+${verification}
 <noscript><meta http-equiv="refresh" content="0;url=/${DEFAULT_LOCALE}/"></noscript>
 <script>${script}</script>
 <style>body{font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0}ul{list-style:none;padding:0;display:flex;gap:1rem}a{font-size:1.25rem}</style>
