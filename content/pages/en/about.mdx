@@ -12,6 +12,12 @@ Hi, I'm the solo developer who built and runs this site. I'm developing a game. 
 
 So it started from the thought, "I wish there were one site that does all of this at once." You drop files without choosing a format and it is detected for you, many files are converted with the same settings in one go, sizes can be matched too, and everything comes back as a ZIP. That is exactly the tool I needed, so I built it. I hope it also helps anyone who has been stuck on image formats, whether for game development, a blog, an online shop or design work.
 
+## How I actually used it
+
+The game I'm building, [Paintochamps](https://paintochamps.tmdrl8336.workers.dev/) (a Korean-language web career simulator where a 16-year-old gamer works their way up to a World Championship win and retirement), needed 78 team logos. They came from many places, so their formats and sizes were all over the place, and the game needed every one of them in the same spec to look consistent on screen.
+
+So I dropped them all into this site and unified them as **256×256 PNGs with a transparent background**. Wide logos were kept in proportion, centered, with the leftover area filled with transparency. I downloaded the result as a ZIP and put it straight into the game's folder. What used to mean opening each file and resizing its canvas became a single batch job. That job is exactly why I built this site. If you also need to bring images of mixed sizes and formats down to one spec, the guide on [unifying image sizes for games](/guides/unify-image-size-for-games/) walks through it.
+
 ## What makes this site different
 
 - **You never pick the input format.** We read the first bytes of the file rather than trusting its extension to find the real format. A file named .jpg that is actually a PNG is handled correctly, and we tell you when the two differ.
