@@ -39,7 +39,7 @@
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | `https://anypictoanypic.com` ✅ 설정됨 (canonical·sitemap·hreflang·JSON-LD가 이 값 사용) |
 | `NEXT_PUBLIC_NAVER_SITE_VERIFICATION` | ✅ 설정됨 (루트·모든 페이지에 meta 태그 출력) |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | 미설정 → 기본값 `tmdrl8336@naver.com` |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | 미설정 → 기본값 `contact@anypictoanypic.com` |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | 미설정 (Google은 DNS로 확인해서 불필요) |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | 미설정 |
 | `NEXT_PUBLIC_ADSENSE_CLIENT` | **미설정** — 애드센스 게시자 ID(`ca-pub-…`). 넣으면 확인용 meta 태그가 나옴 |
@@ -57,19 +57,20 @@
 - **SVG 출력(트레이싱)**: `imagetracerjs`(Unlicense) + **자체 median-cut 팔레트**. 변환 전 주의사항 박스, 변환 후 경고(사진 감지·해상도 축소·경로 과다·원본보다 큼), 결과 미리보기. 20만 경로 초과 시 중단.
 - **일괄 변환 + ZIP**, 변환 전후 용량 비교, EXIF 제거(JPG→JPG에서만 유지 옵션), **설정 기억**(localStorage `anypic:options:v1`).
 - **i18n**: `/ko/…`, `/en/…`. 루트 `/`는 빌드 후처리가 만드는 언어 선택/리다이렉트 페이지(§5).
-- **콘텐츠**: 조합 랜딩 63개/언어(`png-to-svg` 등, AVIF 출력 제외) · 형식 설명 10개/언어 · **가이드 13편/언어** · 소개/방침/약관/문의. 총 **186 URL**.
+- **콘텐츠**: 조합 랜딩 63개/언어(`png-to-svg` 등, AVIF 출력 제외) 중 **색인 대상 47개**(나머지 16개는 `noindex, follow` + sitemap·내부 링크에서 제외, `lib/seo/pairs.ts`의 `NOINDEX_SLUGS`) · 형식 설명 10개/언어 · **가이드 13편/언어** · 소개/방침/약관/문의. 총 **186 URL**(sitemap 154개).
+- **조합 페이지 템플릿**(`lib/i18n/content/{ko,en}/pair.ts`): 효과는 독립 문장, "열리지 않는 이유" FAQ는 WebP·AVIF·TIFF·HEIC 원본에만(그 외는 `pairSpecificFaq`), EXIF 문구는 EXIF 가능 원본에만, HEIC·TIFF 원본엔 투명 안내 없음, meta description 둘째 문장은 `highlight()`. 판단 헬퍼는 `lib/seo/pairLogic.ts`. 관련 변환 링크는 색인 대상만 6~8개 + 관련 가이드 최대 2개.
 - **SEO**: sitemap(hreflang), robots, canonical, OG 이미지(`public/og`), JSON-LD, `npm run seo:audit`.
 - **광고 준비**: `AdSlot` — 변수 없으면 프로덕션에 광고 코드가 **전혀** 없음. `public/ads.txt.sample` 있음.
 
 ---
 
-## 3. 품질 현황 (2026-10-20)
+## 3. 품질 현황 (2026-10-22)
 
 | 검사 | 결과 |
 |---|---|
 | `npm run lint` / `npx tsc --noEmit` | 통과 |
-| `npm test` (vitest) | **75개 통과** (형식 감지, EXIF, 레이아웃 계산, 트레이싱/팔레트, 조합 콘텐츠 품질·중복, 설정 저장) |
-| `npm run seo:audit` | **186페이지, 문제 0** (title/description 길이·중복, h1, canonical, hreflang 상호참조, JSON-LD, 내부 링크, sitemap 일치) |
+| `npm test` (vitest) | **84개 통과** (형식 감지, EXIF, 레이아웃 계산, 트레이싱/팔레트, 조합 콘텐츠 품질·중복·noindex 규칙, 설정 저장) |
+| `npm run seo:audit` | **186페이지(noindex 32), 문제 0** (title/description 길이·중복, h1, canonical, hreflang 상호참조, JSON-LD, 내부 링크, sitemap 일치, noindex 페이지가 sitemap·색인 대상 페이지의 링크에 없는지) |
 | `npm run e2e` | **5개 스위트, 116개 검증, 실패 0** (실제 Chrome, 라이브 사이트에도 실행 가능 `SITE=https://… npm run e2e`) |
 | Lighthouse (이전 측정) | 성능 99 / 접근성 100 / 권장사항 100 / SEO 100 |
 
@@ -91,6 +92,12 @@
 | **11/17 (4주)** | **애드센스 신청 목표일** (판단이 "충족"일 때만) | ☐ |
 | 12/01 | 애드센스 결과 확인, 성과 점검, 반려 시 보강 후 재신청 | ☐ |
 | 2027-09-20 | 도메인 자동 갱신/결제 수단 확인 | ☐ |
+
+### 수정안 진행 (`REVISION_PLAN.md`, 사용자 바탕화면)
+- ☑ §1 조합 템플릿 오류 수정 / ☑ §2 의미 없는 조합 16개 noindex 처리 + 관련 링크 정리 / ☑ §5-4 연락 이메일을 `contact@anypictoanypic.com`으로 교체 (2026-10-22, **로컬 반영만 — 커밋·push 전이면 라이브엔 아직**)
+- ☐ §3 인기 조합 12개 고유 블록(실측 수치·스크린샷은 사용자가 만들어야 함) · ☐ §4 루트 `/` 처리 · ☐ §5-5 방침 문구 · ☐ §6~7 가이드 추가·이미지·기술 SEO
+- ☑ 소개 페이지(`content/pages/{ko,en}/about.mdx`)에 게임 사례 섹션 추가(2026-10-22): 사용자가 링크를 그대로 걸기로 결정(`paintochamps.tmdrl8336.workers.dev`, 계정 ID 노출은 사용자가 감수). 근거는 게임 저장소 `CLAUDE.md`·`src/assets/logos/README.md`(로고 78개, 256×256 투명 PNG, 여백 채우기). **"ZIP으로 받아" 문장은 추정이라 사용자 확인 필요.** 게임 사이트의 소개·문의·후원 팝업에 실명이 보이는지 확인할 것(§6 실명 금지).
+- 이미 되어 있던 항목: §5-1/5-2(애드센스 변수·AdSlot), §5-3(Search Console 도메인 인증·사이트맵)
 
 ### 애드센스 신청 절차 (Claude가 도울 부분 표시)
 1. 사용자: adsense.google.com 가입 → 사이트 `anypictoanypic.com` 추가.
@@ -144,7 +151,7 @@ e2e/                    브라우저 테스트 (README 참고)
 
 - **사이트에 실명이 나오면 안 됨.** 소개는 "게임을 개발하는 개인 개발자", 방침/약관은 "AnyPicToAnyPic 운영자". 구조화 데이터의 작성자/발행자는 Organization. (사용자가 직접 요청해 제거함.)
 - 사이트 이름은 **AnyPicToAnyPic**(로고는 `Pic` 강조). 정식 주소는 www 없는 `anypictoanypic.com`.
-- 문의 이메일: `tmdrl8336@naver.com`(기본값, 사이트에 공개됨).
+- 문의 이메일: `contact@anypictoanypic.com`(기본값, 사이트에 공개됨). Cloudflare Email Routing으로 개인 메일에 전달됨.
 - 커밋 작성자는 이 저장소에서 **익명**(`AnyPicToAnyPic <anypic@users.noreply.github.com>`, 저장소 로컬 git config). 전역 git 설정은 건드리지 않음. 커밋 메시지 끝에 `Co-Authored-By: Claude …` 트레일러.
 - **AVIF 출력 랜딩 페이지는 만들지 않음** (대부분 브라우저가 canvas로 AVIF를 못 만들어서). 변환기 본체에서는 지원 시 선택 가능.
 - 광고는 승인 전에는 프로덕션 빌드에 **코드가 전혀 없어야** 함. 변환 버튼 근처 광고 금지.

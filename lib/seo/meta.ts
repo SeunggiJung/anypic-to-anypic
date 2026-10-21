@@ -11,12 +11,13 @@ function ogImage(lang: Locale) {
 export function pageMetadata(
   lang: Locale,
   path: string,
-  info: { title: string; description: string; type?: "website" | "article" },
+  info: { title: string; description: string; type?: "website" | "article"; noindex?: boolean },
 ): Metadata {
   const url = localePath(lang, path);
   return {
     title: info.title,
     description: info.description,
+    ...(info.noindex && { robots: { index: false, follow: true } }),
     alternates: { canonical: url, languages: alternatesFor(path) },
     openGraph: {
       type: info.type ?? "website",

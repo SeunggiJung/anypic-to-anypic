@@ -80,7 +80,7 @@ scripts/                   빌드 후처리 (prefetch 파일명 보정, 루트 �
 | 변수 | 기본값 | 설명 |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | `https://anypic.example` | **실제 도메인.** canonical·sitemap·hreflang·구조화 데이터에 쓰입니다 |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | `tmdrl8336@naver.com` | 문의·개인정보처리방침에 표시되는 이메일 |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | `contact@anypictoanypic.com` | 문의·개인정보처리방침에 표시되는 이메일 |
 | `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | – | Search Console 소유 확인 값 (HTML 태그 방식의 content 값) |
 | `NEXT_PUBLIC_NAVER_SITE_VERIFICATION` | – | 네이버 서치어드바이저 소유 확인 값 |
 | `NEXT_PUBLIC_BING_SITE_VERIFICATION` | – | Bing Webmaster 소유 확인 값 (선택) |

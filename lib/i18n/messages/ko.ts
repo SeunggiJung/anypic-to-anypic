@@ -239,6 +239,7 @@ export const ko = {
     tipsTitle: (from: string, to: string) => `${from} → ${to} 실전 팁`,
     faqTitle: (from: string, to: string) => `${from} → ${to} 자주 묻는 질문`,
     relatedTitle: "다른 변환도 해 보세요",
+    relatedGuides: "관련 가이드",
     reverse: (to: string, from: string) => `${to} → ${from} (반대로 변환)`,
   },
   formatsPage: {

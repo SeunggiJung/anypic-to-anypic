@@ -1,7 +1,7 @@
 /** 배포 후 실제 도메인으로 교체하세요 (환경 변수로도 덮어쓸 수 있음). */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://anypic.example").replace(/\/$/, "");
 export const SITE_NAME = "AnyPicToAnyPic";
-export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "tmdrl8336@naver.com";
+export const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "contact@anypictoanypic.com";
 /** 검색엔진·광고 소유권 확인용 (배포 후 각 서비스에서 받은 값을 환경 변수로 넣는다) */
 export const GOOGLE_SITE_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "";
 export const NAVER_SITE_VERIFICATION = process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ?? "";

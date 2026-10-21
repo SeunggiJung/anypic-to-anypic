@@ -9,7 +9,7 @@ import { FORMATS } from "@/lib/formats";
 import { allGuideParams, getAllGuides, getGuide, splitAtMiddleHeading } from "@/lib/guides";
 import { LOCALES, LOCALE_META, getMessages, isLocale, localePath } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo/meta";
-import { getPair } from "@/lib/seo/pairs";
+import { getIndexablePair } from "@/lib/seo/pairs";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +47,7 @@ export default async function GuidePage({ params }: PageProps<"/[lang]/guides/[s
 
   const t = getMessages(lang);
   const [first, second] = splitAtMiddleHeading(g.content);
-  const related = g.related.map(getPair).filter((p) => p !== undefined);
+  const related = g.related.map(getIndexablePair).filter((p) => p !== undefined);
   const others = getAllGuides(lang)
     .filter((x) => x.slug !== g.slug)
     .slice(0, 3);

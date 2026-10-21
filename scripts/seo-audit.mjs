@@ -25,6 +25,10 @@ const pages = walk(OUT)
 const urls = new Set(pages.map((p) => p.url));
 const files = new Set(walk(OUT).map((f) => "/" + rel(f)));
 
+// 의도적으로 noindex인 페이지(의미 없는 조합 등): sitemap과 색인 대상 페이지의 내부 링크에서 빠져 있어야 한다
+const isNoindex = (html) => /<meta name="robots" content="[^"]*noindex/.test(html);
+const noindexUrls = new Set(pages.filter((p) => isNoindex(p.html)).map((p) => p.url));
+
 const titles = new Map();
 const descs = new Map();
 const hreflangs = new Map();
@@ -50,7 +54,10 @@ for (const { url, html } of pages) {
   if (h1 !== 1) warn(url, `h1이 ${h1}개`);
   if (!canonical || !canonical.endsWith(url)) warn(url, `canonical 불일치: ${canonical}`);
   if (!lang) warn(url, "html lang 없음");
-  if (/<meta name="robots" content="[^"]*noindex/.test(html) && !url.includes("404")) warn(url, "noindex가 설정됨");
+  // noindex,follow는 의도된 설정이다. 링크까지 막는 nofollow가 붙은 경우만 문제
+  if (/<meta name="robots" content="[^"]*noindex[^"]*nofollow|<meta name="robots" content="[^"]*nofollow[^"]*noindex/.test(html)) {
+    warn(url, "noindex,nofollow가 설정됨");
+  }
   if (!/<meta property="og:image" content="/.test(html)) warn(url, "og:image 없음");
   if (!/<meta name="twitter:card" content="summary_large_image"/.test(html)) warn(url, "twitter:card 없음");
 
@@ -70,6 +77,7 @@ for (const { url, html } of pages) {
     const href = m[1];
     if (href.startsWith("/_next") || /\.[a-z0-9]+$/i.test(href)) { if (!files.has(href)) warn(url, `깨진 파일 링크 ${href}`); continue; }
     if (!urls.has(href)) warn(url, `깨진 내부 링크 ${href}`);
+    else if (noindexUrls.has(href) && !noindexUrls.has(url)) warn(url, `noindex 페이지로 가는 내부 링크 ${href}`);
   }
   // 이미지 alt
   for (const m of html.matchAll(/<img ((?:(?!>).)*)>/g)) if (!/\salt=/.test(m[1])) warn(url, "alt 없는 img");
@@ -92,11 +100,12 @@ const xml = fs.existsSync(path.join(OUT, "sitemap.xml")) ? fs.readFileSync(path.
 const inSitemap = new Set([...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => new URL(m[1]).pathname));
 if (!xml) warn("/sitemap.xml", "sitemap.xml 없음");
 for (const u of inSitemap) if (!urls.has(u)) warn("/sitemap.xml", `sitemap에 있지만 페이지가 없음 ${u}`);
-for (const u of urls) if (!inSitemap.has(u)) warn(u, "sitemap에 없음");
+for (const u of inSitemap) if (noindexUrls.has(u)) warn("/sitemap.xml", `noindex 페이지가 sitemap에 있음 ${u}`);
+for (const u of urls) if (!inSitemap.has(u) && !noindexUrls.has(u)) warn(u, "sitemap에 없음");
 const robots = fs.existsSync(path.join(OUT, "robots.txt")) ? fs.readFileSync(path.join(OUT, "robots.txt"), "utf8") : "";
 if (!/Sitemap:/i.test(robots)) warn("/robots.txt", "Sitemap 지시문 없음");
 
-console.log(`페이지 ${pages.length}개, sitemap URL ${inSitemap.size}개, JSON-LD ${jsonLdCount}개 점검`);
+console.log(`페이지 ${pages.length}개(noindex ${noindexUrls.size}개), sitemap URL ${inSitemap.size}개, JSON-LD ${jsonLdCount}개 점검`);
 if (problems.length) {
   for (const p of problems.slice(0, 60)) console.log(`✗ ${p.page}  ${p.msg}`);
   if (problems.length > 60) console.log(`… 외 ${problems.length - 60}건`);

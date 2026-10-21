@@ -6,7 +6,7 @@ import JsonLd from "@/components/JsonLd";
 import { FORMAT_IDS, FORMATS, TRAITS, getFormat, type ImageFormat } from "@/lib/formats";
 import { LOCALES, getFormatText, getMessages, isLocale, localePath, type Locale } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo/meta";
-import { PAIRS } from "@/lib/seo/pairs";
+import { INDEXABLE_PAIRS } from "@/lib/seo/pairs";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 export const dynamicParams = false;
@@ -62,8 +62,8 @@ export default async function FormatPage({ params }: PageProps<"/[lang]/formats/
   const t = getMessages(lang);
   const p = t.formatPage;
   const text = getFormatText(lang)[f.id];
-  const asInput = PAIRS.filter((x) => x.from === f.id);
-  const asOutput = PAIRS.filter((x) => x.to === f.id);
+  const asInput = INDEXABLE_PAIRS.filter((x) => x.from === f.id);
+  const asOutput = INDEXABLE_PAIRS.filter((x) => x.to === f.id);
   const faq = buildFaq(lang, f, asInput.map((x) => FORMATS[x.to].name));
   const chip = "inline-block rounded-lg border border-border bg-surface px-3 py-1.5 hover:border-accent hover:text-accent";
 

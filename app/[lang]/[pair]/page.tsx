@@ -6,10 +6,11 @@ import Converter from "@/components/Converter";
 import Faq from "@/components/Faq";
 import JsonLd from "@/components/JsonLd";
 import { FORMATS } from "@/lib/formats";
-import { LOCALES, getMessages, isLocale, localePath } from "@/lib/i18n";
+import { getAllGuides } from "@/lib/guides";
+import { LOCALES, getMessages, isLocale, localePath, type Locale } from "@/lib/i18n";
 import { buildPairContent } from "@/lib/i18n/pairContent";
 import { pageMetadata } from "@/lib/seo/meta";
-import { PAIRS, getPair } from "@/lib/seo/pairs";
+import { INDEXABLE_PAIRS, PAIRS, getIndexablePair, getPair, type Pair } from "@/lib/seo/pairs";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 export const dynamicParams = false;
@@ -23,7 +24,30 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/[pair]">):
   const pair = getPair(slug);
   if (!isLocale(lang) || !pair) return {};
   const c = buildPairContent(lang, pair);
-  return pageMetadata(lang, `/${pair.slug}/`, { title: c.title, description: c.description });
+  return pageMetadata(lang, `/${pair.slug}/`, { title: c.title, description: c.description, noindex: !pair.indexable });
+}
+
+const MAX_SAME_FROM = 4;
+const MAX_SAME_TO = 3;
+const MAX_GUIDES = 2;
+
+/** 이 조합과 관련된 가이드: 해당 조합을 직접 연결한 글 먼저, 같은 원본/대상 형식의 조합을 연결한 글 다음 */
+function relatedGuides(lang: Locale, pair: Pair) {
+  const score = (related: string[]) => {
+    if (related.includes(pair.slug)) return 2;
+    return related.some((s) => {
+      const p = getPair(s);
+      return p && (p.from === pair.from || p.to === pair.to);
+    })
+      ? 1
+      : 0;
+  };
+  return getAllGuides(lang)
+    .map((g) => ({ g, s: score(g.related) }))
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, MAX_GUIDES)
+    .map((x) => x.g);
 }
 
 export default async function PairPage({ params }: PageProps<"/[lang]/[pair]">) {
@@ -37,9 +61,11 @@ export default async function PairPage({ params }: PageProps<"/[lang]/[pair]">) 
   const c = buildPairContent(lang, pair);
   const path = localePath(lang, `/${pair.slug}/`);
 
-  const sameFrom = PAIRS.filter((p) => p.from === pair.from && p.to !== pair.to);
-  const sameTo = PAIRS.filter((p) => p.to === pair.to && p.from !== pair.from);
-  const reverse = getPair(`${pair.to}-to-${pair.from}`);
+  // 관련 변환: 색인 대상인 조합만, 같은 원본/대상 형식 위주로 6~8개
+  const sameFrom = INDEXABLE_PAIRS.filter((p) => p.from === pair.from && p.to !== pair.to).slice(0, MAX_SAME_FROM);
+  const sameTo = INDEXABLE_PAIRS.filter((p) => p.to === pair.to && p.from !== pair.from).slice(0, MAX_SAME_TO);
+  const reverse = getIndexablePair(`${pair.to}-to-${pair.from}`);
+  const guides = relatedGuides(lang, pair);
   const chip = "inline-block rounded-lg border border-border bg-surface px-3 py-1.5 hover:border-accent hover:text-accent";
 
   return (
@@ -171,6 +197,20 @@ export default async function PairPage({ params }: PageProps<"/[lang]/[pair]">) 
             </li>
           ))}
         </ul>
+        {guides.length > 0 && (
+          <>
+            <h3 className="mb-2 mt-6 text-base font-bold">{t.pair.relatedGuides}</h3>
+            <ul className="flex flex-wrap gap-2 text-sm">
+              {guides.map((g) => (
+                <li key={g.slug}>
+                  <Link href={localePath(lang, `/guides/${g.slug}/`)} className={chip}>
+                    {g.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </section>
     </div>
   );

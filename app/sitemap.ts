@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { FORMAT_IDS } from "@/lib/formats";
 import { allGuideParams, getGuide } from "@/lib/guides";
 import { DEFAULT_LOCALE, LOCALES, LOCALE_META, localePath, type Locale } from "@/lib/i18n/config";
-import { PAIRS } from "@/lib/seo/pairs";
+import { INDEXABLE_PAIRS } from "@/lib/seo/pairs";
 import { absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -20,7 +20,7 @@ interface Page {
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: Page[] = [
     { path: "/", priority: 1 },
-    ...PAIRS.map((p) => ({ path: `/${p.slug}/`, priority: 0.8 })),
+    ...INDEXABLE_PAIRS.map((p) => ({ path: `/${p.slug}/`, priority: 0.8 })),
     { path: "/formats/", priority: 0.6 },
     ...FORMAT_IDS.map((id) => ({ path: `/formats/${id}/`, priority: 0.6 })),
     { path: "/guides/", priority: 0.7 },

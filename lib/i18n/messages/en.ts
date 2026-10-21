@@ -237,6 +237,7 @@ export const en: Messages = {
     tipsTitle: (from: string, to: string) => `${from} → ${to}: practical tips`,
     faqTitle: (from: string, to: string) => `${from} → ${to}: frequently asked questions`,
     relatedTitle: "Try other conversions",
+    relatedGuides: "Related guides",
     reverse: (to: string, from: string) => `${to} → ${from} (reverse)`,
   },
   formatsPage: {
