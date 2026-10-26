@@ -141,11 +141,11 @@ export default async function GuidePage({ params }: PageProps<"/[lang]/guides/[s
       </div>
 
       {adsActive && (
-        <aside aria-label={t.ads.label} className="hidden lg:block">
+        <div className="hidden lg:block">
           <div className="sticky top-6">
             <AdSlot name="sidebar" desktopOnly />
           </div>
-        </aside>
+        </div>
       )}
     </div>
   );

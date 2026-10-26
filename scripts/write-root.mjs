@@ -23,10 +23,9 @@ if (!fs.existsSync(OUT)) {
 }
 
 const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://anypic.example").replace(/\/$/, "");
-const alternates = [
-  ...LOCALES.map((l) => `<link rel="alternate" hreflang="${LOCALE_META[l].htmlLang}" href="${SITE}/${l}/">`),
-  `<link rel="alternate" hreflang="x-default" href="${SITE}/${DEFAULT_LOCALE}/">`,
-].join("\n");
+// 루트는 /ko/ 등으로 보내는 입구일 뿐이라 hreflang 대안을 선언하지 않는다(언어 페이지가 서로 되가리키지 않으면 무시됨).
+// noindex도 걸지 않는다: canonical이 기본 언어 페이지를 가리키므로 루트로 들어온 링크 신호가 그쪽으로 합쳐진다.
+const DESCRIPTION = "Convert any image to PNG, JPG, WebP, GIF, BMP, ICO or SVG in your browser. Files never leave your device.";
 
 const script = `(function(){var L=${JSON.stringify(LOCALES)},t;try{t=localStorage.getItem("lang")}catch(e){}
 if(L.indexOf(t)<0){t=${JSON.stringify(DEFAULT_LOCALE)};var n=navigator.languages||[navigator.language];
@@ -54,9 +53,8 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AnyPicToAnyPic</title>
-<meta name="robots" content="noindex,follow">
+<meta name="description" content="${DESCRIPTION}">
 <link rel="canonical" href="${SITE}/${DEFAULT_LOCALE}/">
-${alternates}
 ${verification}
 <noscript><meta http-equiv="refresh" content="0;url=/${DEFAULT_LOCALE}/"></noscript>
 <script>${script}</script>

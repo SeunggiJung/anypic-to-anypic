@@ -43,6 +43,9 @@ export const en: Messages = {
     tooLarge: (maxMb: number) => `This file is too large. The limit is ${maxMb}MB per file.`,
     empty: "This file is empty.",
     noPreview: "No preview",
+    added: (n: number) => `${n} ${n === 1 ? "file" : "files"} added.`,
+    removed: "File removed.",
+    cleared: "All files cleared.",
   },
   output: {
     heading: "Convert to which format?",

@@ -45,6 +45,9 @@ export const ko = {
     tooLarge: (maxMb: number) => `파일이 너무 큽니다. 한 파일당 최대 ${maxMb}MB까지 지원합니다.`,
     empty: "비어 있는 파일입니다.",
     noPreview: "미리보기 없음",
+    added: (n: number) => `${n}개 파일을 추가했습니다.`,
+    removed: "파일을 삭제했습니다.",
+    cleared: "모든 파일을 지웠습니다.",
   },
   output: {
     heading: "어떤 형식으로 바꿀까요?",

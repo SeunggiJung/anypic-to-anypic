@@ -52,3 +52,6 @@ next-env.d.ts
 
 # e2e 샘플(내려받아 생성)
 e2e/samples/
+
+# Playwright MCP 임시 출력
+.playwright-mcp/

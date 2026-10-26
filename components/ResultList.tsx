@@ -44,11 +44,12 @@ function noteText(t: Messages, note: ConvertNote): string {
 export default function ResultList({ items, output, support, onReconvert, onEditSettings, onStartOver }: Props) {
   const t = useT();
   const [zipping, setZipping] = useState(false);
-  const rootRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
-  // 결과가 나타나면 화면 안으로 가져온다 (긴 옵션 화면에서 스크롤이 남아 있을 수 있음)
+  // 결과가 나타나면 제목으로 포커스를 옮긴다: 옵션 화면이 사라져 포커스가 body로 빠지는 것을 막고,
+  // 긴 옵션 화면에서 스크롤이 남아 있어도 결과가 화면 안으로 들어온다.
   useEffect(() => {
-    rootRef.current?.scrollIntoView({ block: "nearest" });
+    headingRef.current?.focus();
   }, []);
   const done = items.filter((i) => i.status === "done" && i.result);
 
@@ -78,9 +79,9 @@ export default function ResultList({ items, output, support, onReconvert, onEdit
   const others = (OUTPUT_FORMATS as OutputFormat[]).filter((f) => f !== output && (!support || support[f]));
 
   return (
-    <section ref={rootRef} aria-labelledby="result-heading" aria-live="polite">
+    <section aria-labelledby="result-heading">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <h2 id="result-heading" className="font-bold">
+        <h2 ref={headingRef} id="result-heading" tabIndex={-1} className="font-bold outline-none">
           {t.result.heading} <span className="font-normal text-muted">· {t.result.summary(done.length, failed.length)}</span>
         </h2>
         {done.length > 1 && (

@@ -1,7 +1,7 @@
 # HANDOFF — AnyPicToAnyPic 인수인계
 
 > 새 세션에서 이 프로젝트를 이어받는 Claude(또는 사람)를 위한 문서입니다. **이 파일 → CLAUDE.md → README.md** 순서로 읽으면 됩니다.
-> 마지막 갱신: **2026-10-20**. 상태가 바뀌면 이 파일을 같이 고치세요 (맨 아래 "갱신 규칙").
+> 마지막 갱신: **2026-10-26**. 상태가 바뀌면 이 파일을 같이 고치세요 (맨 아래 "갱신 규칙").
 > ⚠ 이 저장소는 **공개(public)** 일 수 있습니다. 계정 이름·토큰·실명 같은 개인 정보는 이 문서에 쓰지 마세요.
 
 ---
@@ -60,7 +60,8 @@
 - **콘텐츠**: 조합 랜딩 63개/언어(`png-to-svg` 등, AVIF 출력 제외) 중 **색인 대상 47개**(나머지 16개는 `noindex, follow` + sitemap·내부 링크에서 제외, `lib/seo/pairs.ts`의 `NOINDEX_SLUGS`) · 형식 설명 10개/언어 · **가이드 13편/언어** · 소개/방침/약관/문의. 총 **186 URL**(sitemap 154개).
 - **조합 페이지 템플릿**(`lib/i18n/content/{ko,en}/pair.ts`): 효과는 독립 문장, "열리지 않는 이유" FAQ는 WebP·AVIF·TIFF·HEIC 원본에만(그 외는 `pairSpecificFaq`), EXIF 문구는 EXIF 가능 원본에만, HEIC·TIFF 원본엔 투명 안내 없음, meta description 둘째 문장은 `highlight()`. 판단 헬퍼는 `lib/seo/pairLogic.ts`. 관련 변환 링크는 색인 대상만 6~8개 + 관련 가이드 최대 2개.
 - **SEO**: sitemap(hreflang), robots, canonical, OG 이미지(`public/og`), JSON-LD, `npm run seo:audit`.
-- **광고 준비**: `AdSlot` — 변수 없으면 프로덕션에 광고 코드가 **전혀** 없음. `public/ads.txt.sample` 있음.
+- **광고 준비**: `AdSlot` — `NEXT_PUBLIC_ADS_ENABLED=true`일 때만 `AdSlotLive`를 동적 import(`next.config.ts`가 이 값을 항상 "true"/"false" 문자열로 고정). 변수 없으면 `out/` 전체에 광고 코드·스크립트 주소가 **전혀** 없음(2026-10-26 grep으로 0건 확인, 켠 빌드에는 들어감 확인). `public/ads.txt.sample` 있음. 광고 영역은 `role="group"`(aside 중첩 없음).
+- **접근성**: `Converter`에 항상 마운트된 `role="status"` 알림(파일 추가·삭제·변환 결과), 변환 버튼은 `aria-disabled`, 완료 시 결과 `h2`로 포커스, 삭제·새로 시작·옵션 수정 뒤 포커스 복원(`pendingFocus`). 감사 보고서의 나머지(라디오 화살표 키 #4, 테두리 대비 #6, 언어 메뉴 Esc, 다운로드 버튼 이름 등)는 **미적용** — §4 참고.
 
 ---
 
@@ -96,6 +97,8 @@
 ### 수정안 진행 (`REVISION_PLAN.md`, 사용자 바탕화면)
 - ☑ §1 조합 템플릿 오류 수정 / ☑ §2 의미 없는 조합 16개 noindex 처리 + 관련 링크 정리 / ☑ §5-4 연락 이메일을 `contact@anypictoanypic.com`으로 교체 (2026-10-22, **로컬 반영만 — 커밋·push 전이면 라이브엔 아직**)
 - ☐ §3 인기 조합 12개 고유 블록(실측 수치·스크린샷은 사용자가 만들어야 함) · ☐ §4 루트 `/` 처리 · ☐ §5-5 방침 문구 · ☐ §6~7 가이드 추가·이미지·기술 SEO
+- **2026-10-26 에이전트 점검 결과**: 구글 색인 195개 중 185개 생성(사용자 확인). 가이드 팩트체크 4건 수정(파비콘 "48px 배수"→Google 문서 기준, DevTools Clear 아이콘, 맥 미리보기 EXIF 경로, 소개 페이지 "자르기" 서술) 커밋 완료. 루트 `/`에서 `noindex`·hreflang 제거(canonical→`/ko/` 유지, description 추가, `seo:audit`에 루트 검사 추가). 남은 SEO 제안: 홈·`/formats/`에 "많이 쓰는 변환" 칩, 검색어 겹치는 페이지 6쌍 정리(제목·H1은 Search Console 데이터 본 뒤), 팁 없는 색인 조합 20개 보강/noindex 판단(11/10), 인기 조합 12개 고유 블록(사용자의 실측·스크린샷 필요), 가이드 주제 8개 후보, `workers.dev` 끄기(`"workers_dev": false`).
+- **사용자 확인 필요**: 소개 페이지 "ZIP으로 받아…" 문장·로고 78개/256×256 등 사실, 가이드의 "직접 측정" 표현(HEIC 701KB→417KB 등), 링크 텍스트 "게임 이미지 크기 통일하기" vs 가이드 제목, 문의 페이지 화자(ko "제 쪽"/en "we"), webp 문서 "25~35%" 원문 대조, `unify-image-size-for-games`의 "블록 압축 텍스처는 4의 배수" 출처.
 - ☑ 소개 페이지(`content/pages/{ko,en}/about.mdx`)에 게임 사례 섹션 추가(2026-10-22): 사용자가 링크를 그대로 걸기로 결정(`paintochamps.tmdrl8336.workers.dev`, 계정 ID 노출은 사용자가 감수). 근거는 게임 저장소 `CLAUDE.md`·`src/assets/logos/README.md`(로고 78개, 256×256 투명 PNG, 여백 채우기). **"ZIP으로 받아" 문장은 추정이라 사용자 확인 필요.** 게임 사이트의 소개·문의·후원 팝업에 실명이 보이는지 확인할 것(§6 실명 금지).
 - 이미 되어 있던 항목: §5-1/5-2(애드센스 변수·AdSlot), §5-3(Search Console 도메인 인증·사이트맵)
 

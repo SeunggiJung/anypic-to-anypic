@@ -105,6 +105,19 @@ for (const u of urls) if (!inSitemap.has(u) && !noindexUrls.has(u)) warn(u, "sit
 const robots = fs.existsSync(path.join(OUT, "robots.txt")) ? fs.readFileSync(path.join(OUT, "robots.txt"), "utf8") : "";
 if (!/Sitemap:/i.test(robots)) warn("/robots.txt", "Sitemap 지시문 없음");
 
+// 루트(/): 색인 가능해야 하고(noindex 금지), canonical은 기본 언어 페이지를 가리켜야 하며, 서로 되가리키지 않는 hreflang은 없어야 한다
+const rootFile = path.join(OUT, "index.html");
+if (!fs.existsSync(rootFile)) {
+  warn("/", "루트 index.html 없음");
+} else {
+  const root = fs.readFileSync(rootFile, "utf8");
+  const rootCanonical = first(root, /<link rel="canonical" href="(.*?)"\/?>/);
+  if (isNoindex(root)) warn("/", "루트에 noindex가 있음 (링크 신호가 canonical로 합쳐지지 않음)");
+  if (!rootCanonical || !urls.has(new URL(rootCanonical).pathname)) warn("/", `루트 canonical이 실제 페이지를 가리키지 않음 ${rootCanonical}`);
+  if (/hreflang=/.test(root.replace(/<a [^>]*>/g, ""))) warn("/", "루트에 hreflang link가 있음 (언어 페이지가 되가리키지 않음)");
+  if (!/<meta name="description" content="[^"]{50,}"/.test(root)) warn("/", "루트 meta description이 없거나 너무 짧음");
+}
+
 console.log(`페이지 ${pages.length}개(noindex ${noindexUrls.size}개), sitemap URL ${inSitemap.size}개, JSON-LD ${jsonLdCount}개 점검`);
 if (problems.length) {
   for (const p of problems.slice(0, 60)) console.log(`✗ ${p.page}  ${p.msg}`);

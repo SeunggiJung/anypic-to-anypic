@@ -66,6 +66,11 @@ export default function Converter({ initialOutput, inputHint }: Props) {
   const nextId = useRef(1);
   const runId = useRef(0);
   const itemsRef = useRef<FileItem[]>([]);
+  // 스크린리더용 상태 알림과 포커스 복원 (버튼이 사라지거나 화면이 바뀌어도 포커스가 body로 빠지지 않게)
+  const [status, setStatus] = useState("");
+  const rootRef = useRef<HTMLDivElement>(null);
+  const convertRef = useRef<HTMLButtonElement>(null);
+  const pendingFocus = useRef<"root" | "convert" | null>(null);
 
   // 브라우저가 선택한 출력 형식을 지원하지 않으면(예: AVIF) PNG로 대체한다
   const options: ConvertOptions = support && !support[chosen.output] ? { ...chosen, output: "png" } : chosen;
@@ -81,6 +86,15 @@ export default function Converter({ initialOutput, inputHint }: Props) {
   useEffect(() => {
     detectOutputSupport().then(setSupport);
   }, []);
+
+  // 화면이 바뀐 직후 요청된 곳으로 포커스를 옮긴다
+  useEffect(() => {
+    const target = pendingFocus.current;
+    if (!target) return;
+    pendingFocus.current = null;
+    const el = target === "convert" && convertRef.current ? convertRef.current : rootRef.current;
+    el?.focus({ preventScroll: true });
+  });
 
   // 언마운트 시 미리보기 URL 해제
   useEffect(() => {
@@ -119,9 +133,13 @@ export default function Converter({ initialOutput, inputHint }: Props) {
       ...added,
     ]);
     setPhase("idle");
+    const accepted = added.filter((i) => i.status !== "rejected").length;
+    if (accepted > 0) setStatus(t.files.added(accepted));
   }, [t]);
 
   function removeItem(id: number) {
+    pendingFocus.current = "root";
+    setStatus(t.files.removed);
     setItems((prev) => {
       const target = prev.find((i) => i.id === id);
       if (target?.previewUrl) URL.revokeObjectURL(target.previewUrl);
@@ -130,6 +148,8 @@ export default function Converter({ initialOutput, inputHint }: Props) {
   }
 
   function clearAll() {
+    pendingFocus.current = "root";
+    setStatus(t.files.cleared);
     runId.current++;
     items.forEach((i) => i.previewUrl && URL.revokeObjectURL(i.previewUrl));
     setItems([]);
@@ -142,6 +162,9 @@ export default function Converter({ initialOutput, inputHint }: Props) {
     if (!targets.length) return;
 
     setPhase("converting");
+    setStatus(t.actions.converting);
+    let ok = 0;
+    let fail = 0;
     setItems((prev) =>
       prev.map((i) => (i.status === "rejected" ? i : { ...i, status: "converting", result: undefined, error: undefined })),
     );
@@ -161,6 +184,7 @@ export default function Converter({ initialOutput, inputHint }: Props) {
           if (opts.output === "svg" && r.blob.size > item.file.size * 1.2) {
             notes.push({ code: "svgLarger", value: r.blob.size / item.file.size });
           }
+          ok++;
           patch(item.id, {
             status: "done",
             result: {
@@ -172,21 +196,27 @@ export default function Converter({ initialOutput, inputHint }: Props) {
             },
           });
         } catch (err) {
+          fail++;
           patch(item.id, { status: "error", error: errorMessage(t, err, opts.output) });
         }
       }
     }
     await Promise.all(Array.from({ length: Math.min(CONCURRENCY, targets.length) }, worker));
-    if (runId.current === myRun) setPhase("done");
+    if (runId.current === myRun) {
+      setPhase("done");
+      setStatus(`${t.result.heading}: ${t.result.summary(ok, fail)}`);
+    }
   }, [t]);
 
   function reconvert(output: OutputFormat) {
+    pendingFocus.current = "convert";
     const next = { ...options, output };
     setOptions(next);
     void run(next);
   }
 
   function editSettings() {
+    pendingFocus.current = "convert";
     setItems((prev) =>
       prev.map((i) => (i.status === "rejected" ? i : { ...i, status: "ready", result: undefined, error: undefined })),
     );
@@ -199,7 +229,10 @@ export default function Converter({ initialOutput, inputHint }: Props) {
   const sameAsInput = valid.length > 0 && valid.every((i) => i.detected === options.output);
 
   return (
-    <div className="space-y-6">
+    <div ref={rootRef} tabIndex={-1} className="space-y-6 outline-none">
+      <div role="status" className="sr-only">
+        {status}
+      </div>
       <Dropzone onFiles={addFiles} compact={items.length > 0} hintFormat={inputHint} />
 
       <p className="flex items-center justify-center gap-1.5 text-center text-xs text-muted">
@@ -233,11 +266,15 @@ export default function Converter({ initialOutput, inputHint }: Props) {
                 hasPhotoInput={valid.some((i) => i.detected === "jpg" || i.detected === "heic" || i.detected === "tiff")}
               />
               <div>
+                {/* disabled 대신 aria-disabled: 변환 중에도 포커스가 버튼에 남는다 */}
                 <button
+                  ref={convertRef}
                   type="button"
-                  onClick={() => run(options)}
-                  disabled={converting}
-                  className="w-full rounded-xl bg-accent px-6 py-3.5 text-lg font-bold text-on-accent transition-colors hover:bg-accent-hover disabled:opacity-70 sm:w-auto sm:min-w-56"
+                  onClick={() => {
+                    if (!converting) void run(options);
+                  }}
+                  aria-disabled={converting}
+                  className="w-full rounded-xl bg-accent px-6 py-3.5 text-lg font-bold text-on-accent transition-colors hover:bg-accent-hover aria-disabled:cursor-default aria-disabled:opacity-70 sm:w-auto sm:min-w-56"
                 >
                   {converting
                     ? `${t.actions.converting} (${finished}/${valid.length})`
