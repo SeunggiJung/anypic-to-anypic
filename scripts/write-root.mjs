@@ -47,6 +47,12 @@ const verification = [
   .map(([name, value]) => `<meta name="${name}" content="${esc(value)}">`)
   .join("\n");
 
+// 애드센스 스크립트: app/[lang]/layout.tsx와 같은 조건(게시자 ID가 있을 때)으로 루트에도 넣는다
+const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
+const adsenseScript = adsenseClient
+  ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${encodeURIComponent(adsenseClient)}" crossorigin="anonymous"></script>`
+  : "";
+
 const html = `<!doctype html>
 <html lang="${LOCALE_META[DEFAULT_LOCALE].htmlLang}">
 <head>
@@ -56,6 +62,7 @@ const html = `<!doctype html>
 <meta name="description" content="${DESCRIPTION}">
 <link rel="canonical" href="${SITE}/${DEFAULT_LOCALE}/">
 ${verification}
+${adsenseScript}
 <noscript><meta http-equiv="refresh" content="0;url=/${DEFAULT_LOCALE}/"></noscript>
 <script>${script}</script>
 <style>body{font-family:system-ui,sans-serif;display:grid;place-items:center;min-height:100vh;margin:0}ul{list-style:none;padding:0;display:flex;gap:1rem}a{font-size:1.25rem}</style>

@@ -1,6 +1,5 @@
 "use client";
 
-import Script from "next/script";
 import { useEffect, useSyncExternalStore } from "react";
 import { AD_SLOTS, ADSENSE_CLIENT, adsActive, type AdSlotName } from "@/lib/ads";
 import { cn } from "@/lib/utils";
@@ -28,8 +27,9 @@ declare global {
 }
 
 /**
- * 실제 애드센스 광고. AdSlot이 NEXT_PUBLIC_ADS_ENABLED=true 일 때만 동적으로 불러오므로,
- * 승인 전 빌드에는 이 파일(과 광고 스크립트 주소)이 번들에 들어가지 않는다.
+ * 실제 애드센스 수동 광고 슬롯. AdSlot이 NEXT_PUBLIC_ADS_ENABLED=true 일 때만 동적으로 불러오므로,
+ * 슬롯을 켜지 않은 빌드에는 이 파일이 번들에 들어가지 않는다.
+ * adsbygoogle.js 스크립트는 app/[lang]/layout.tsx가 head에 넣는다(게시자 ID가 있을 때).
  */
 export default function AdSlotLive({ name, className, desktopOnly = false }: Props) {
   const t = useT();
@@ -58,13 +58,6 @@ export default function AdSlotLive({ name, className, desktopOnly = false }: Pro
       <p aria-hidden="true" className="mb-1 text-center text-[10px] uppercase tracking-wider text-muted">
         {t.ads.label}
       </p>
-      <Script
-        id="adsense-loader"
-        async
-        strategy="afterInteractive"
-        crossOrigin="anonymous"
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-      />
       <ins
         className="adsbygoogle block min-h-[100px]"
         style={{ display: "block" }}

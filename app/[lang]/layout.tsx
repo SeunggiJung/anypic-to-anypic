@@ -63,6 +63,14 @@ export default async function RootLayout({ children, params }: LayoutProps<"/[la
     <html lang={LOCALE_META[lang].htmlLang} className="h-full antialiased" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {/* 애드센스 스크립트(자동 광고·수동 슬롯 공용). 게시자 ID 변수가 있을 때만 모든 페이지의 head에 들어간다 */}
+        {ADSENSE_CLIENT && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body className="min-h-full flex flex-col">
         <LangProvider lang={lang}>

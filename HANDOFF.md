@@ -60,7 +60,8 @@
 - **콘텐츠**: 조합 랜딩 63개/언어(`png-to-svg` 등, AVIF 출력 제외) 중 **색인 대상 47개**(나머지 16개는 `noindex, follow` + sitemap·내부 링크에서 제외, `lib/seo/pairs.ts`의 `NOINDEX_SLUGS`) · 형식 설명 10개/언어 · **가이드 13편/언어** · 소개/방침/약관/문의. 총 **186 URL**(sitemap 154개).
 - **조합 페이지 템플릿**(`lib/i18n/content/{ko,en}/pair.ts`): 효과는 독립 문장, "열리지 않는 이유" FAQ는 WebP·AVIF·TIFF·HEIC 원본에만(그 외는 `pairSpecificFaq`), EXIF 문구는 EXIF 가능 원본에만, HEIC·TIFF 원본엔 투명 안내 없음, meta description 둘째 문장은 `highlight()`. 판단 헬퍼는 `lib/seo/pairLogic.ts`. 관련 변환 링크는 색인 대상만 6~8개 + 관련 가이드 최대 2개.
 - **SEO**: sitemap(hreflang), robots, canonical, OG 이미지(`public/og`), JSON-LD, `npm run seo:audit`.
-- **광고 준비**: `AdSlot` — `NEXT_PUBLIC_ADS_ENABLED=true`일 때만 `AdSlotLive`를 동적 import(`next.config.ts`가 이 값을 항상 "true"/"false" 문자열로 고정). 변수 없으면 `out/` 전체에 광고 코드·스크립트 주소가 **전혀** 없음(2026-10-26 grep으로 0건 확인, 켠 빌드에는 들어감 확인). `public/ads.txt.sample` 있음. 광고 영역은 `role="group"`(aside 중첩 없음).
+- **애드센스 스크립트 (2026-10-26 사용자 결정: 지금 신청, 자동 광고 사용)**: `NEXT_PUBLIC_ADSENSE_CLIENT`(게시자 ID)가 있으면 `app/[lang]/layout.tsx`와 `scripts/write-root.mjs`가 모든 페이지·루트의 `<head>`에 `adsbygoogle.js` 스크립트와 `google-adsense-account` meta를 넣는다(변수가 없으면 어느 쪽도 안 나옴). `public/ads.txt`는 게시자 ID로 생성 완료. 자동 광고의 형식·제외 페이지는 AdSense 콘솔에서 조절(변환기가 있는 홈·조합 페이지는 제외, 앵커·전면 광고는 끄는 것을 권고).
+- **광고 슬롯**: `AdSlot` — `NEXT_PUBLIC_ADS_ENABLED=true`일 때만 `AdSlotLive`를 동적 import(`next.config.ts`가 이 값을 항상 "true"/"false" 문자열로 고정). 변수 없으면 `out/` 전체에 광고 코드·스크립트 주소가 **전혀** 없음(2026-10-26 grep으로 0건 확인, 켠 빌드에는 들어감 확인). `public/ads.txt.sample` 있음. 광고 영역은 `role="group"`(aside 중첩 없음).
 - **접근성**: `Converter`에 항상 마운트된 `role="status"` 알림(파일 추가·삭제·변환 결과), 변환 버튼은 `aria-disabled`, 완료 시 결과 `h2`로 포커스, 삭제·새로 시작·옵션 수정 뒤 포커스 복원(`pendingFocus`). 감사 보고서의 나머지(라디오 화살표 키 #4, 테두리 대비 #6, 언어 메뉴 Esc, 다운로드 버튼 이름 등)는 **미적용** — §4 참고.
 
 ---
