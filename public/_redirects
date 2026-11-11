@@ -1,0 +1,9 @@
+# 합쳐서 없앤 가이드의 옛 주소를 새 글로 영구 이동(301)한다 (Cloudflare Workers 정적 에셋의 _redirects)
+/ko/guides/open-iphone-photos-on-windows/ /ko/guides/what-is-heic/ 301
+/ko/guides/open-iphone-photos-on-windows /ko/guides/what-is-heic/ 301
+/en/guides/open-iphone-photos-on-windows/ /en/guides/what-is-heic/ 301
+/en/guides/open-iphone-photos-on-windows /en/guides/what-is-heic/ 301
+/ko/guides/batch-convert-images/ /ko/guides/unify-image-size-for-games/ 301
+/ko/guides/batch-convert-images /ko/guides/unify-image-size-for-games/ 301
+/en/guides/batch-convert-images/ /en/guides/unify-image-size-for-games/ 301
+/en/guides/batch-convert-images /en/guides/unify-image-size-for-games/ 301

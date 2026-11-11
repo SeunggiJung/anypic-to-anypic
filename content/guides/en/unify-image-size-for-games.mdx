@@ -1,12 +1,14 @@
 ---
 title: "Unify Image Sizes for Games: Mixed Sizes in One Pass"
-description: "Images from different sources rarely match in size, ratio or format. Here is how to bring them to one spec, such as transparent 256×256 PNGs, in a single batch."
+description: "Bring images of mixed sizes, ratios and formats to one spec, such as transparent 256×256 PNGs, and download a ZIP. Includes batch speed measured on 100 files."
 date: 2026-10-20
-tags: [game development, resize, specs]
-related: [jpg-to-png, webp-to-png, png-to-ico]
+tags: [game development, resize, specs, batch conversion]
+related: [jpg-to-png, webp-to-png, png-to-ico, png-to-webp]
 ---
 
-Images pulled from several places into one project rarely match. A 512×512 PNG sits next to a wide JPG, and a WebP is mixed in somewhere. The engine wants a single size and format, and fixing files one at a time in an image editor takes a while. This guide covers how to bring many images to one spec in a single pass on this site.
+I once had to bring 78 logos for a game to the same size and format. They came from different sources, so sizes and formats varied, and the wide logos had to keep their proportions and sit in the center. Instead of opening each file to match the canvas size, I built this converter to handle them in one pass, and I used it for that job. This guide lays out what that job needed.
+
+Images pulled from several places into one project rarely match. A 512×512 PNG sits next to a wide JPG, and a WebP is mixed in somewhere. The engine wants a single size and format, and fixing files one at a time in an image editor takes a while.
 
 ## Decide the spec first
 
@@ -18,11 +20,11 @@ Settle three things before converting and the rest is easier.
 
 ## Steps
 
-1. Drag all the images in at once. Mixed formats are fine, and each file's real format is detected automatically.
+1. Drag all the images in at once. You can also click to choose several, or paste an image from the clipboard with Ctrl+V. Mixed formats are fine, and each file's real format is detected automatically.
 2. Choose the output format (for example PNG).
 3. In the options, set Size to **Set exact size (width × height)** and enter the width and height in px. Common sizes are available as buttons.
-4. Choose **How to fit** and **Image position**.
-5. Convert, then download everything as a ZIP. Files keep their original names; only the extension changes.
+4. Choose **How to fit** and **Image position**. The same settings apply to every file.
+5. Convert, then download everything with **Download all as ZIP**. Files keep their original names; only the extension changes.
 
 The screen below shows the options for steps 3 and 4, with an exact size of 256×256 entered.
 
@@ -72,6 +74,35 @@ This is the result screen the converter showed.
 
 These numbers come from these four samples and the settings above. Your own images will differ.
 
+## Converting many files at once
+
+### Mixed formats are fine
+
+A folder with PNG, JPG, WebP, HEIC, TIFF and SVG files can go in as it is. Each file's format is detected separately. If a file has the wrong extension, it is processed by its real format and the list tells you which file it was. An unsupported file is marked as an error in the list, and the rest convert normally.
+
+### When you download a ZIP
+
+- Result files **keep their original names**, and only the extension changes (for example `photo.heic` → `photo.jpg`).
+- If files from different folders share a name, numbers are added inside the ZIP, as in `photo (2).jpg`.
+- Each file shows its size before and after and the percentage change, so you can see where the savings are largest.
+- You can also download files one at a time with each file's **Download** button.
+
+### Batch speed, measured
+
+For the test, 100 photos were created (27.9MB in total, 286KB each on average, about 950×1270) and converted together from JPG to WebP at quality 80. The site was served locally and timed in Chromium on the PC used to write this guide, a development desktop.
+
+| Files | Time to convert | Time to build the ZIP | ZIP size |
+| --- | --- | --- | --- |
+| 10 | 2.8 s | 0.1 s | 1.3MB |
+| 50 | 4.4 s | 1.9 s | 6.6MB |
+| 100 | 6.4 s | 1.8 s | 13.1MB |
+
+All 100 files converted, the downloaded ZIP held every one of them, and the archive passed an integrity check. The 27.9MB shrank to 13.1MB. The time for 10 files includes first-run setup. Below is the result screen for the 10-file run.
+
+![The result screen after converting 10 photos to WebP. Each file shows its size before and after and the percentage change, with a Download all as ZIP button at the top](/images/guides/batch-result-10.png)
+
+Speed varies a lot with the PC and browser. Batches larger than 100 were not measured.
+
 ## Pixel art
 
 Ordinary scaling interpolates smoothly between pixels. That suits photos, but enlarging pixel art this way smears the edges and the pixel look disappears. Turn on **"Pixel art: scale without smoothing"** instead. It enlarges the pixels as they are, with no interpolation, so edges stay sharp. It looks cleanest at a **whole-number scale**, such as 16×16 to 64×64. At other scales, some pixels can end up wider than others.
@@ -88,12 +119,16 @@ An ICO can be at most 256px on a side. If you ask for something larger, such as 
 
 The format, size, fit method, position and other options you used last are remembered in this browser, so you don't need to pick them again when working to the same spec. To restore the defaults, press "Reset settings" at the top of the options. Settings are stored only in this device's browser and are never sent to a server.
 
-## Limits
+## Limits to know
 
 - Sizes are set in px only. There is no resolution setting in inches or DPI.
 - Cropping only lets you choose the alignment position (nine cells). You can't pick an arbitrary region of the image to crop.
+- Each file can be up to **50MB**. There is no limit on the number of files, but browser memory is finite, so a very large batch can run slower than the measurements above. For sizes that weren't measured (several hundred files or more), splitting the batch is safer.
+- If HEIC files are in the batch, the first one takes a few extra seconds while the decoder downloads. Large TIFFs and very large images can fail for lack of memory. A failed file is flagged in the list and the others are unaffected.
 - Animated GIF and WebP files convert only their first frame. A sprite sheet (many frames in one image) is treated as a single image, so choose the size with the frame scale in mind.
 
 <ConvertLink to="jpg-to-png">Convert JPG to PNG</ConvertLink>
 
 <ConvertLink to="webp-to-png">Convert WebP to PNG</ConvertLink>
+
+<ConvertLink to="png-to-webp">Convert PNG to WebP</ConvertLink>
