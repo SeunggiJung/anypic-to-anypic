@@ -1,55 +1,55 @@
 ---
-title: "What Is HEIC and Why Won't It Open?"
-description: Why iPhones save photos as HEIC, why they won't open on Windows or the web, and how to convert them to JPG or shoot JPG from the start.
+title: "What Is HEIC, and Why Won't It Open?"
+description: Why iPhones save photos as HEIC, why those files won't open on Windows or the web, and how to convert them to JPG or shoot JPG from the start.
 date: 2026-10-20
 tags: [HEIC, iPhone]
 related: [heic-to-jpg, heic-to-png]
 ---
 
-You moved photos from your iPhone to a PC, and the extension is `.HEIC`. Double-clicking does nothing, or a photo site refuses the upload. Nothing is broken; the file format is just unfamiliar to that software.
+You copied photos from your iPhone to a PC, and they end in `.HEIC`. Double-clicking does nothing, or a photo site rejects the upload. Nothing is broken. The software just doesn't recognize the format.
 
 ## What is HEIC?
 
-HEIC is HEVC (H.265) video compression packaged in a container called HEIF. Because it applies video compression technology to still photos, it is said to store the same quality in about half the space of JPG. Apple made it the default camera format starting with iOS 11 in 2017, largely to save storage on the iPhone.
+HEIC is HEVC (H.265) video compression packaged in a container called HEIF. Since it applies video compression to still photos, it is said to store the same quality in about half the space of a JPG. Apple made it the default camera format with iOS 11 in 2017, largely to save storage on the iPhone.
 
-A HEIC file can hold more than one photo. Extras such as the short video of a Live Photo, or the depth data of Portrait mode, can travel with it.
+A HEIC file can hold more than a single photo. Extras such as the short video from a Live Photo or the depth data from Portrait mode can be stored alongside it.
 
-## Why won't it open on Windows or the web?
+## Why it won't open on Windows or the web
 
-The main reason is that HEVC technology carries patent royalties. Browser and operating system makers are reluctant to include it by default, so support is patchy.
+The main reason is that HEVC carries patent royalties. Browser and operating system makers are reluctant to build it in by default, so support is patchy.
 
 - Apple devices (iPhone, iPad, Mac) open it natively.
-- Windows 10 and 11 often need extensions from the Microsoft Store (HEIF Image Extensions and HEVC Video Extensions). One of them may be paid.
-- Most web browsers can't display HEIC files directly. That is why shops, job sites and government upload forms often refuse HEIC.
+- Windows 10 and 11 often need extensions from the Microsoft Store: HEIF Image Extensions and HEVC Video Extensions. One of them may cost money.
+- Most web browsers can't display HEIC directly. That's why shops, job sites and government upload forms so often refuse it.
 
 <Callout title="Your photo isn't damaged">
-This is a format-support problem, not a corrupted photo. Convert it to a supported format and you can see the same photo as it was.
+This is a format-support problem, not a corrupted photo. Convert it to a supported format and you'll see the same photo as before.
 </Callout>
 
 ## Three ways to fix it
 
 ### 1. Convert photos you've already taken
 
-Drop the HEIC file onto this site and choose JPG, and it is converted right in your browser. The file isn't sent to a server, so personal photos are safe to use. You can add many at once and download them as a ZIP.
+Drop the HEIC file onto this site, choose JPG, and it is converted right in your browser. The file isn't sent to a server, so personal photos are safe to use. You can add many at once and download them as a ZIP.
 
 <ConvertLink to="heic-to-jpg">Convert HEIC to JPG</ConvertLink>
 
 ### HEIC file sizes, measured
 
-One thing first: the HEIC files used for this measurement **were not made by an iPhone.** They are test files made by saving two photos taken for this guide (a chicken dish and a dog) as HEIC with libheif (the x265 encoder). It is the same format, but an iPhone's encoder settings may differ. Both photos were scaled down to 1280px on the long side.
+One thing to say first: the HEIC files used for these measurements **were not made by an iPhone.** They are test files, made by saving two photos taken for this guide (a chicken dish and a dog) as HEIC with libheif (the x265 encoder). The format is the same, but an iPhone's encoder settings may differ. Both photos were scaled down to 1280px on the long side.
 
 | Photo | JPG quality 90 | HEIC quality 50 | HEIC quality 70 | HEIC quality 90 |
 | --- | --- | --- | --- | --- |
 | Chicken | 343KB | 176KB | 464KB | 842KB |
 | Dog | 272KB | 119KB | 399KB | 753KB |
 
-Going by the numbers alone, HEIC at quality 90 is far bigger than JPG at quality 90. That is because **a quality number means different things in different encoders, so the same number is not the same visual quality.** So the two were compared at the same closeness to the source (PSNR, in dB). Drawing straight lines between the measured points to estimate, at the same PSNR HEIC was about 39% smaller than JPG for the chicken photo and about 37% smaller for the dog photo. That is a little less than the common "about half the size of a JPG", and it is an estimate for two photos and this encoder setting.
+Going by the raw numbers, HEIC at quality 90 is far bigger than JPG at quality 90. But **a quality number means something different in each encoder, so the same number is not the same visual quality.** The two were therefore compared at equal closeness to the source (PSNR, in dB). Estimated by drawing straight lines between the measured points, HEIC was about 39% smaller than JPG on the chicken photo and about 37% smaller on the dog photo at the same PSNR. That's a little less than the usual claim of "about half the size of a JPG", and it's an estimate from two photos and one encoder setting.
 
 ![The same area enlarged 3×: the PNG source, JPG 80 (175KB), WebP 80 (111KB) and HEIC 50 (119KB). They are almost indistinguishable by eye](/images/guides/photo-zoom-jpg-webp-heic.png)
 
 Enlarged, HEIC 50 (119KB) is hard to tell apart from JPG 80 (175KB) by eye.
 
-Opening these HEIC files on this site and converting them to JPG (quality 90) gave the following.
+Going the other way, these HEIC files were opened on this site and converted to JPG (quality 90), with the following results.
 
 | Photo | HEIC | Converted to JPG 90 |
 | --- | --- | --- |
@@ -58,23 +58,23 @@ Opening these HEIC files on this site and converting them to JPG (quality 90) ga
 | Dog | quality 50, 119KB | 268KB |
 | Dog | quality 70, 399KB | 296KB |
 
-**Converting a small HEIC to a high-quality JPG can make the file larger**, because HEIC compresses more efficiently. If size matters, try a lower JPG quality and check the real size on the result screen.
+**Converting a small HEIC to a high-quality JPG can make the file bigger**, because HEIC compresses more efficiently. If size matters, try a lower JPG quality and check the actual size on the result screen.
 
 ### 2. Shoot JPG from now on
 
-In the iPhone Settings app, open Camera, then Formats, and choose the more compatible option (Most Compatible). New photos are then saved as JPG. The label can differ slightly by iOS version. The trade-off is that the same photo takes up more storage. Photos you've already taken are not affected.
+In the iPhone's Settings app, open Camera, then Formats, and choose the more compatible option (Most Compatible). New photos are then saved as JPG. The label may differ slightly between iOS versions. The trade-off is that each photo takes up more storage, and photos you've already taken aren't affected.
 
 ### 3. Turn on automatic conversion when transferring
 
-At the bottom of the Photos section in Settings there is a Transfer to Mac or PC option. Choosing Automatic instead of Keep Originals converts photos to a compatible format as they are transferred over a cable. On the iCloud website you can also choose whether to download the original or a more compatible format.
+At the bottom of the Photos section in Settings is a Transfer to Mac or PC option. Choose Automatic instead of Keep Originals, and photos are converted to a compatible format as they're copied over a cable. On the iCloud website you can also choose whether to download the original or a more compatible format.
 
 ## JPG or PNG?
 
-Unless you have a specific reason, JPG is recommended. Saving the same chicken photo as PNG gives 2.6MB, more than seven times the JPG at quality 90 (343KB). PNG only makes sense when you need a transparent background or want to avoid degradation across many edits. A closer comparison is on the [PNG](/formats/png/) and [JPG](/formats/jpg/) pages.
+Unless you have a specific reason, go with JPG. Saved as a PNG, the same chicken photo comes to 2.6MB, more than seven times the size of the JPG at quality 90 (343KB). PNG only makes sense if you need a transparent background or want to avoid degradation across many rounds of editing. The [PNG](/formats/png/) and [JPG](/formats/jpg/) pages compare them in more detail.
 
 ## What you lose when converting
 
-- The short video and depth data of Live Photos are not included; only the main photo remains.
-- EXIF data such as shooting location (GPS) is removed by default on this site. That also keeps your location from being exposed when you post photos on resale sites or social networks.
+- The short video and depth data of a Live Photo are not carried over. Only the main photo remains.
+- EXIF data such as the shooting location (GPS) is removed by default on this site. That also keeps your location from being exposed when you post photos on resale sites or social networks.
 
-Don't delete the original HEIC; keep it separately. If you need another format later, you can convert it again at any time.
+Keep the original HEIC files somewhere separate rather than deleting them. If you need another format later, you can convert them again at any time.

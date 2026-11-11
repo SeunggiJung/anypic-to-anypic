@@ -1,26 +1,28 @@
 ---
 title: "How to Make a Favicon: ICO, PNG or SVG?"
-description: "How to make a website favicon from one image, how to choose between ICO, PNG and SVG, which sizes to use, and how to link it in your HTML."
+description: "Make a website favicon from a single logo image. Covers how to choose between ICO, PNG and SVG, which sizes to use, and the HTML that links it."
 date: 2026-10-20
 tags: [favicon, ICO, website]
 related: [png-to-ico, svg-to-ico, jpg-to-ico]
 ---
 
-A favicon is the small icon shown in browser tabs, bookmarks and search results. One image is enough to make it, but choosing the wrong format or size can make it blurry or invisible.
+A favicon is the small icon in browser tabs, bookmarks and search results. One image is all you need to make it, but the wrong format or size leaves it blurry or missing altogether.
 
-## What kind of image works
+## Picking the right image
 
-- It should be **square**. If the aspect ratio differs, this site keeps the ratio, centers the image and leaves the leftover area transparent.
-- A **simple shape** is best. It is shown very small, as little as 16×16 in some places, so text-heavy or detailed images become unreadable. Bold shapes or one or two letters stay recognizable.
-- Start from a **large original** if you can (for example 512×512 or more). Shrinking a large image is fine; enlarging a small one makes it blurry.
+- **Make it square.** If the image has a different aspect ratio, this site keeps the ratio, centers the image and fills the leftover space with transparency.
+- **Keep the shape simple.** Favicons are shown very small, down to 16×16 in some places, so text or fine detail turns unreadable. A bold shape or one or two letters survives.
+- **Start from a large original**, say 512×512 or bigger. Shrinking a big image is fine. Enlarging a small one makes it blurry.
 
 ### How small it actually looks
 
-A logo with text and a plain icon without text were drawn for this guide and saved with this site's converter as 16, 32 and 180 px PNGs. Inside the gray frame is the actual pixel size, and the big pictures are enlarged without smoothing.
+To see this, a logo with text and a plain icon without text were drawn and saved as 16, 32 and 180 px PNGs with this site's converter. The gray frame shows the real pixel size, and the large versions are enlarged without smoothing.
 
 ![The same two images saved at 16, 32 and 180 px. The logo with text turns into a smear at 16 px and is still just a blur at 32 px, while the plain icon without text keeps a recognizable star even at 16 px](/images/guides/favicon-sizes.png)
 
-At 16 px the text in the logo, "STAR LEAGUE", is a complete smear you can't read, and at 32 px it is still only a blur. The icon made of bold shapes stays recognizable even at 16 px. Most favicons are seen at 16 to 32 px, so it is safer to drop the text and use only the boldest shape of the logo. For reference, a 300×300 PNG (8.9KB) saved as a 256×256 ICO came to 16.6KB.
+At 16 px the logo's text, "STAR LEAGUE", is a smear you can't read, and at 32 px it is still just a blur. The icon built from bold shapes is recognizable even at 16 px. Most favicons are seen at 16 to 32 px, so leave the text out and use only the boldest shape from your logo.
+
+File size is a separate matter: a 300×300 PNG (8.9KB) saved as a 256×256 ICO came to 16.6KB.
 
 ## Formats: ICO, PNG, SVG
 
@@ -30,20 +32,22 @@ At 16 px the text in the logo, "STAR LEAGUE", is a complete smear you can't read
 | PNG | Current browsers also accept PNG favicons. Supports transparency |
 | SVG | A vector, so it's sharp at any size and the file is small. Some environments don't support it, so it's safer to ship an ICO or PNG alongside |
 
-To have your favicon appear in Google Search results, check the conditions in Google's documentation. The favicon must be square (1:1) and at least 8×8px, and Google recommends a size larger than 48×48px so it looks good on various surfaces. Googlebot must also be able to crawl the favicon file and your home page, and the favicon URL should stay stable.
+If you want the favicon to show up in Google Search results, check the requirements in Google's documentation. The favicon must be square (1:1) and at least 8×8px, and Google recommends going above 48×48px so it looks good on different surfaces. Googlebot also has to be able to crawl both the favicon file and your home page, and the favicon URL shouldn't change often.
 
-## Steps on this site
+## Making one on this site
 
-1. Upload your logo image (PNG, JPG, SVG and so on). The format is detected automatically.
-2. Choose **ICO** as the output. If the original is larger than 256px, it is scaled down to 256px or smaller with the aspect ratio kept.
-3. If you want to fix the size, choose **Set exact size** in the Size option and pick a square (for example 128×128). Originals that aren't square are centered with "Keep ratio + fill the margins".
+1. Upload your logo (PNG, JPG, SVG and so on). The format is detected automatically.
+2. Choose **ICO** as the output. If the original is larger than 256px, it is scaled down to 256px or less with the aspect ratio kept.
+3. To fix the size yourself, pick **Set exact size** in the Size option and enter a square, for example 128×128. An original that isn't square is centered using "Keep ratio + fill the margins".
 4. Rename the downloaded file to `favicon.ico` and put it at the top level of your site.
 
-For reference, this site's own favicon was also made by converting an SVG logo to ICO with this converter. The ICO this site makes holds **one image at one size**. There is no feature to bundle several sizes (16, 32, 48 and so on) into one file. Current browsers scale larger images themselves, so this is fine in most cases.
+This site's own favicon was made the same way, by converting an SVG logo to ICO with this converter.
+
+The ICO it produces holds **a single image at one size**. There is no option to bundle several sizes (16, 32, 48 and so on) into one file. Current browsers scale a larger image down themselves, so this is fine in most cases.
 
 ## Linking it in HTML
 
-Link it in your site's `head` like this, changing the paths to wherever your files are.
+Add the links to your site's `head`, changing the paths to match where your files live.
 
 ```html
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -51,11 +55,11 @@ Link it in your site's `head` like this, changing the paths to wherever your fil
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 ```
 
-`apple-touch-icon` is the icon used when someone adds your site to an iPhone home screen, and a 180×180 PNG is usually recommended. Transparent areas can appear black, so it's best to make it a PNG with a filled background. On this site, save as PNG, set the size to 180×180 and turn on "Fill transparent areas and margins with the background color".
+`apple-touch-icon` is the icon used when someone adds your site to an iPhone home screen, and a 180×180 PNG is the usual recommendation. Transparent areas can show up black, so use a PNG with a filled background. On this site, save as PNG, set the size to 180×180 and turn on "Fill transparent areas and margins with the background color".
 
-## Checking it
+## Checking the result
 
-Browsers cache favicons heavily, so you may still see the old icon after changing it. Check with a hard refresh or in a private window.
+Browsers cache favicons aggressively, so the old icon may keep showing after you change it. Do a hard refresh or open the site in a private window.
 
 <ConvertLink to="png-to-ico">Convert PNG to ICO</ConvertLink>
 
