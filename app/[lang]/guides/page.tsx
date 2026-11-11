@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdSenseScript from "@/components/AdSenseScript";
 import { LOCALES, getMessages, isLocale, localePath } from "@/lib/i18n";
 import { getAllGuides } from "@/lib/guides";
 import { pageMetadata } from "@/lib/seo/meta";
@@ -24,6 +25,7 @@ export default async function GuidesPage({ params }: PageProps<"/[lang]/guides">
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      <AdSenseScript />
       <h1 className="text-3xl font-extrabold tracking-tight">{t.title}</h1>
       <p className="mt-3 text-muted">{t.lead}</p>
 

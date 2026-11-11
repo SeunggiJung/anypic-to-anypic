@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdSenseScript from "@/components/AdSenseScript";
 import Faq, { type FaqItem } from "@/components/Faq";
 import JsonLd from "@/components/JsonLd";
 import { FORMAT_IDS, FORMATS, TRAITS, getFormat, type ImageFormat } from "@/lib/formats";
@@ -80,6 +81,7 @@ export default async function FormatPage({ params }: PageProps<"/[lang]/formats/
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      <AdSenseScript />
       <JsonLd
         data={{
           "@context": "https://schema.org",

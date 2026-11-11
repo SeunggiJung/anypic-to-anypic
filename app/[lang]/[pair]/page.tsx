@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdSenseScript from "@/components/AdSenseScript";
 import AdSlot from "@/components/AdSlot";
 import Converter from "@/components/Converter";
 import Faq from "@/components/Faq";
@@ -70,6 +71,8 @@ export default async function PairPage({ params }: PageProps<"/[lang]/[pair]">) 
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:py-14">
+      {/* noindex 조합에는 광고 코드를 넣지 않는다 */}
+      {pair.indexable && <AdSenseScript />}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -136,14 +139,13 @@ export default async function PairPage({ params }: PageProps<"/[lang]/[pair]">) 
             </tbody>
           </table>
         </div>
-        <h3>
-          <Link href={localePath(lang, `/formats/${from.id}/`)}>{t.pair.whatIs(from.name)}</Link>
-        </h3>
-        <p>{c.fromIntro}</p>
-        <h3>
-          <Link href={localePath(lang, `/formats/${to.id}/`)}>{t.pair.whatIs(to.name)}</Link>
-        </h3>
-        <p>{c.toIntro}</p>
+        {/* 형식 소개 문단은 형식 설명 페이지에만 둔다 (조합 페이지마다 같은 문단을 반복하지 않는다) */}
+        <p>
+          {t.pair.learnFormats}{" "}
+          <Link href={localePath(lang, `/formats/${from.id}/`)}>{t.formatPage.h1(from.name)}</Link>
+          {" · "}
+          <Link href={localePath(lang, `/formats/${to.id}/`)}>{t.formatPage.h1(to.name)}</Link>
+        </p>
 
         <h2>{t.pair.changesTitle(from.name, to.name)}</h2>
         {c.changes.map((ch) => (
@@ -170,7 +172,7 @@ export default async function PairPage({ params }: PageProps<"/[lang]/[pair]">) 
         )}
       </article>
 
-      <AdSlot name="content" />
+      {pair.indexable && <AdSlot name="content" />}
 
       <Faq items={c.faq} heading={t.pair.faqTitle(from.name, to.name)} />
 

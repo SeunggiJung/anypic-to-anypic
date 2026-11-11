@@ -13,9 +13,6 @@ export interface PairContent {
   description: string;
   h1: string;
   lead: string[];
-  /** 두 형식 각각의 소개 (형식 설명 페이지의 첫 문단) */
-  fromIntro: string;
-  toIntro: string;
   table: Array<{ label: string; from: string; to: string }>;
   changes: Change[];
   when: string[];

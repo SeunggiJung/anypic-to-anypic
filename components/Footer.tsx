@@ -5,6 +5,8 @@ import { SITE_NAME } from "@/lib/site";
 export default function Footer({ lang }: { lang: Locale }) {
   const t = getMessages(lang);
   const links = [
+    ["/guides/", t.nav.guides],
+    ["/formats/", t.nav.formats],
     ["/about/", t.nav.about],
     ["/privacy/", t.nav.privacy],
     ["/terms/", t.nav.terms],

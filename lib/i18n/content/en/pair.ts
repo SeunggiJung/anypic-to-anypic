@@ -216,9 +216,19 @@ function buildWhen(pair: Pair): string[] {
   if (TRAITS[to.id].appSupport > TRAITS[from.id].appSupport) {
     out.push(`You need to upload to a program, messenger or upload form that can't open ${from.name}`);
   }
-  if (!TRAITS[from.id].browserOpen) out.push(`You want to use it on a website or blog but browsers can't display ${from.name}`);
+  // Web use only applies when the output is a web format (nobody converts to BMP or ICO to post on a blog)
+  if (!TRAITS[from.id].browserOpen && to.id !== "bmp" && to.id !== "ico") {
+    out.push(`You want to use it on a website or blog but browsers can't display ${from.name}`);
+  }
   if (ratio !== null && ratio < 0.8) out.push(`You need to shrink a ${from.name} file for an email attachment or an upload size limit`);
-  if (to.id === "webp") out.push(`You want to make ${from.name} images lighter so pages load faster`);
+  // "Lighter" only where the file really gets smaller; for pairs that grow (AVIF/HEIC → WebP) the reason is compatibility
+  if (to.id === "webp") {
+    out.push(
+      ratio === null || ratio < 1
+        ? `You want to make ${from.name} images lighter so pages load faster`
+        : `You need a web image that also shows up in browsers and services that can't display ${from.name}`,
+    );
+  }
   if (to.id === "png" && kindOf(from.id) === "lossy") out.push("You'll edit it several times and want an intermediate file that no longer degrades");
   if (to.id === "png" && from.id === "svg") out.push("You're putting a logo or icon into a document, social network or presentation that doesn't support vectors");
   if (to.id === "jpg" && losesTransparency(from, to)) out.push("You're submitting to a place that doesn't need transparency (print, certificates, a product's main image) with a white background");
@@ -453,8 +463,6 @@ export function buildPairContent(pair: Pair): PairContent {
     description: `Convert ${from.name} files to ${to.name} for free. ${highlight(pair, from, to)}. No sign-up; it runs in your browser and nothing is uploaded.`,
     h1,
     lead: buildLead(pair),
-    fromIntro: from.description[0],
-    toIntro: to.description[0],
     table: buildTable(pair),
     changes,
     when: buildWhen(pair),

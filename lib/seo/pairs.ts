@@ -13,6 +13,7 @@ export interface Pair {
  * 검색 수요가 거의 없거나 내용이 맞지 않아 색인 대상에서 뺄 조합.
  * - 사진·래스터 → SVG: 사이트 스스로 "사진에는 트레이싱이 맞지 않다"고 안내한다. png-to-svg(로고 용도)만 유지.
  * - 수요가 낮은 조합: 변환해야 할 이유가 거의 없는 형식 쌍.
+ * - 직접 쓴 팁(pairNotes)이 없는 조합: 색인 대상은 모두 팁이 있어야 한다(pairContent.test.ts가 검사).
  */
 const NOINDEX_SLUGS = new Set([
   "jpg-to-svg",
@@ -31,6 +32,28 @@ const NOINDEX_SLUGS = new Set([
   "tiff-to-bmp",
   "avif-to-bmp",
   "avif-to-gif",
+  // 2026-11 애드센스 "가치가 별로 없는 콘텐츠" 반려 대응: 직접 쓴 팁이 없어 본문이 사실상 전부 틀 문장인 조합.
+  // (실측: 다른 조합과 같거나 형식 이름만 바뀐 문장이 평균 98.7%) 고유한 내용을 쓰기 전에는 색인에 올리지 않는다.
+  "avif-to-ico",
+  "avif-to-webp",
+  "bmp-to-gif",
+  "bmp-to-ico",
+  "bmp-to-webp",
+  "gif-to-bmp",
+  "gif-to-ico",
+  "gif-to-webp",
+  "ico-to-bmp",
+  "ico-to-gif",
+  "ico-to-jpg",
+  "ico-to-webp",
+  "jpg-to-bmp",
+  "jpg-to-gif",
+  "svg-to-bmp",
+  "svg-to-gif",
+  "svg-to-webp",
+  "tiff-to-webp",
+  "webp-to-bmp",
+  "webp-to-ico",
 ]);
 
 /**

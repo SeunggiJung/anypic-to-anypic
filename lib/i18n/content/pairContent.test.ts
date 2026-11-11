@@ -9,8 +9,6 @@ import { PAIR_NOTES as NOTES_KO } from "./ko/pairNotes";
 function sentences(c: PairContent): Set<string> {
   const text = [
     ...c.lead,
-    c.fromIntro,
-    c.toIntro,
     ...c.changes.map((x) => x.body),
     ...c.when.map((w) => `${w}.`),
     ...c.tips,
@@ -27,15 +25,19 @@ describe("랜딩 페이지 조합", () => {
     expect(PAIRS.some((p) => p.from === p.to)).toBe(false);
   });
 
-  it("의미 없는 조합 16개는 noindex 대상이고 로고용 png-to-svg는 색인 대상이다", () => {
+  it("의미 없거나 틀 문장뿐인 조합 36개는 noindex 대상이고 로고용 png-to-svg는 색인 대상이다", () => {
     const noindex = PAIRS.filter((p) => !p.indexable).map((p) => p.slug);
-    expect(noindex).toHaveLength(16);
-    expect(INDEXABLE_PAIRS).toHaveLength(47);
+    expect(noindex).toHaveLength(36);
+    expect(INDEXABLE_PAIRS).toHaveLength(27);
     expect(noindex).toContain("jpg-to-svg");
     expect(noindex).toContain("heic-to-ico");
     expect(INDEXABLE_PAIRS.map((p) => p.slug)).toContain("png-to-svg");
     // 사진·래스터 → SVG는 png 외에 모두 색인 대상이 아니다
     expect(PAIRS.filter((p) => p.to === "svg" && p.from !== "png").every((p) => !p.indexable)).toBe(true);
+  });
+
+  it("색인 대상 조합에는 모두 직접 쓴 팁이 있다 (틀 문장뿐인 페이지를 색인에 올리지 않는다)", () => {
+    for (const p of INDEXABLE_PAIRS) expect(NOTES_KO[p.slug]?.tips.length ?? 0, p.slug).toBeGreaterThan(0);
   });
 
   it("직접 쓴 팁의 조합 키가 모든 언어에서 같고 실제 조합이다", () => {
@@ -78,14 +80,16 @@ for (const lang of LOCALES) {
       for (const { pair, c } of contents) expect(JSON.stringify(c), pair.slug).not.toMatch(/[가-힣]/);
     });
 
-    it("페이지끼리 문장이 과하게 겹치지 않는다 (복붙형 중복 방지)", () => {
-      const sets = contents.map((x) => sentences(x.c));
+    // 색인 대상 조합끼리만 본다. noindex 조합은 틀 문장뿐이라 색인에서 뺀 페이지들이다.
+    it("색인 대상 페이지끼리 문장이 과하게 겹치지 않는다 (복붙형 중복 방지)", () => {
+      const indexed = contents.filter((x) => x.pair.indexable);
+      const sets = indexed.map((x) => sentences(x.c));
       let worst = { score: 0, a: "", b: "" };
       for (let i = 0; i < sets.length; i++) {
         for (let j = i + 1; j < sets.length; j++) {
           const inter = [...sets[i]].filter((s) => sets[j].has(s)).length;
           const score = inter / Math.min(sets[i].size, sets[j].size);
-          if (score > worst.score) worst = { score, a: contents[i].pair.slug, b: contents[j].pair.slug };
+          if (score > worst.score) worst = { score, a: indexed[i].pair.slug, b: indexed[j].pair.slug };
         }
       }
       console.log(`[${lang}] 가장 유사한 두 페이지: ${worst.a} / ${worst.b} — ${(worst.score * 100).toFixed(0)}%`);

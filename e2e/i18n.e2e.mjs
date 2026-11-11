@@ -130,7 +130,7 @@ for (const [locale, expected] of [["ko-KR", "/ko/"], ["en-US", "/en/"], ["fr-FR"
 {
   const xml = await (await fetch(ORIGIN + "/sitemap.xml")).text();
   const locs = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
-  check(locs.filter((l) => l.includes("/ko/")).length === locs.filter((l) => l.includes("/en/")).length && locs.length > 140, `sitemap ${locs.length}개 URL (ko/en 동수)`);
+  check(locs.filter((l) => l.includes("/ko/")).length === locs.filter((l) => l.includes("/en/")).length && locs.length > 100, `sitemap ${locs.length}개 URL (ko/en 동수)`);
   check(xml.includes('hreflang="en"') && xml.includes('hreflang="ko"') && xml.includes("x-default"), "sitemap hreflang alternates");
 }
 

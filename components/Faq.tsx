@@ -5,6 +5,9 @@ export interface FaqItem {
   a: string;
 }
 
+/** 처음부터 펼쳐 두는 질문 수. 전부 접어 두면 화면에 보이는 본문이 거의 없어진다. */
+const OPEN_COUNT = 3;
+
 /** FAQ 목록 + FAQPage 구조화 데이터(JSON-LD) */
 export default function Faq({ items, heading }: { items: FaqItem[]; heading: string }) {
   return (
@@ -24,8 +27,8 @@ export default function Faq({ items, heading }: { items: FaqItem[]; heading: str
         {heading}
       </h2>
       <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-surface">
-        {items.map((i) => (
-          <details key={i.q} className="group p-4">
+        {items.map((i, idx) => (
+          <details key={i.q} className="group p-4" open={idx < OPEN_COUNT}>
             <summary className="cursor-pointer list-none font-semibold marker:hidden">
               <span className="mr-2 text-accent group-open:hidden">+</span>
               <span className="mr-2 hidden text-accent group-open:inline">−</span>

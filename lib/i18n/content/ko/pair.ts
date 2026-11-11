@@ -222,9 +222,19 @@ function buildWhen(pair: Pair): string[] {
   if (TRAITS[to.id].appSupport > TRAITS[from.id].appSupport) {
     out.push(`${from.name}를 열지 못하는 프로그램, 메신저, 업로드 폼에 이미지를 올려야 할 때`);
   }
-  if (!TRAITS[from.id].browserOpen) out.push(`웹사이트·블로그에 올리려는데 브라우저가 ${from.name}를 표시하지 못할 때`);
+  // 웹에 올리는 용도는 결과 형식이 웹용일 때만 (BMP·ICO로 바꿔서 블로그에 올리지는 않는다)
+  if (!TRAITS[from.id].browserOpen && to.id !== "bmp" && to.id !== "ico") {
+    out.push(`웹사이트·블로그에 올리려는데 브라우저가 ${from.name}를 표시하지 못할 때`);
+  }
   if (ratio !== null && ratio < 0.8) out.push(`이메일 첨부나 업로드 용량 제한 때문에 ${from.name} 파일 크기를 줄여야 할 때`);
-  if (to.id === "webp") out.push(`웹페이지 로딩 속도를 높이려고 ${from.name} 이미지를 더 가볍게 만들 때`);
+  // "더 가볍게"는 실제로 용량이 줄어드는 조합에만. 커지는 조합(AVIF·HEIC → WebP)은 호환성이 이유다
+  if (to.id === "webp") {
+    out.push(
+      ratio === null || ratio < 1
+        ? `웹페이지 로딩 속도를 높이려고 ${from.name} 이미지를 더 가볍게 만들 때`
+        : `${from.name}를 표시하지 못하는 브라우저·서비스에서도 보이는 웹용 이미지가 필요할 때`,
+    );
+  }
   if (to.id === "png" && kindOf(from.id) === "lossy") out.push("편집을 여러 번 거쳐야 해서 더 이상 열화되지 않는 중간 파일이 필요할 때");
   if (to.id === "png" && from.id === "svg") out.push("벡터를 지원하지 않는 문서·SNS·프레젠테이션에 로고나 아이콘을 넣을 때");
   if (to.id === "jpg" && losesTransparency(from, to)) out.push("투명 배경이 필요 없는 곳(인쇄, 증명서, 상품 대표 이미지)에 흰 배경으로 제출할 때");
@@ -364,7 +374,7 @@ function buildFaq(pair: Pair, changes: Change[]): PairContent["faq"] {
     const [s1, s2] = to.strengths;
     faq.push({
       q: `${to.name}${TO} 저장하면 어떤 점이 좋은가요?`,
-      a: `${to.name}의 장점으로는 "${s1}"${s2 ? `, "${s2}"` : ""} 등이 있습니다. 반대로 ${from.name}${TO} 두는 편이 나은 경우도 있으니 아래 비교표에서 두 형식의 차이를 확인하세요.`,
+      a: `${to.name}의 장점으로는 "${s1}"${s2 ? `, "${s2}"` : ""} 등이 있습니다. 반대로 ${from.name}${TO} 두는 편이 나은 경우도 있으니 위 비교표에서 두 형식의 차이를 확인하세요.`,
     });
   }
 
@@ -463,8 +473,6 @@ export function buildPairContent(pair: Pair): PairContent {
     description: `${from.name} 파일을 ${to.name}${TO} 무료 변환하세요. ${highlight(pair, from, to)}. 가입 없이 브라우저에서 바로 처리되고 파일은 서버로 전송되지 않습니다.`,
     h1,
     lead: buildLead(pair),
-    fromIntro: from.description[0],
-    toIntro: to.description[0],
     table: buildTable(pair),
     changes,
     when: buildWhen(pair),

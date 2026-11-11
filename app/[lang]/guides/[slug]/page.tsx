@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdSenseScript from "@/components/AdSenseScript";
 import AdSlot from "@/components/AdSlot";
 import JsonLd from "@/components/JsonLd";
 import { Mdx } from "@/components/mdx";
@@ -48,9 +49,15 @@ export default async function GuidePage({ params }: PageProps<"/[lang]/guides/[s
   const t = getMessages(lang);
   const [first, second] = splitAtMiddleHeading(g.content);
   const related = g.related.map(getIndexablePair).filter((p) => p !== undefined);
+  // 다른 가이드: 태그나 연결한 변환이 겹치는 글을 먼저 (모든 글에 같은 3편이 나오지 않게)
+  const overlap = (x: { tags: string[]; related: string[] }) =>
+    x.tags.filter((tag) => g.tags.includes(tag)).length * 2 + x.related.filter((r) => g.related.includes(r)).length;
   const others = getAllGuides(lang)
     .filter((x) => x.slug !== g.slug)
-    .slice(0, 3);
+    .map((x) => ({ x, score: overlap(x) }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(({ x }) => x);
 
   return (
     <div
@@ -60,6 +67,7 @@ export default async function GuidePage({ params }: PageProps<"/[lang]/guides/[s
       )}
     >
       <div className="min-w-0">
+        <AdSenseScript />
         <JsonLd
           data={{
             "@context": "https://schema.org",
@@ -100,6 +108,22 @@ export default async function GuidePage({ params }: PageProps<"/[lang]/guides/[s
             </>
           )}
         </article>
+
+        {/* 글쓴이 표시: 실명 없이 운영자(게임을 개발하는 개인 개발자)로만 적는다 */}
+        <aside aria-label={t.guides.bylineLabel} className="mt-10 rounded-xl border border-border bg-surface p-5 text-sm">
+          <p className="font-bold">
+            {t.guides.bylineLabel}: {t.guides.byline(SITE_NAME)}
+          </p>
+          <p className="mt-1 leading-relaxed text-muted">{t.guides.bylineBody}</p>
+          <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+            <Link href={localePath(lang, "/about/")} className="text-accent underline underline-offset-2">
+              {t.guides.bylineAbout}
+            </Link>
+            <Link href={localePath(lang, "/contact/")} className="text-accent underline underline-offset-2">
+              {t.guides.bylineContact}
+            </Link>
+          </p>
+        </aside>
         <AdSlot name="article" />
 
         {related.length > 0 && (

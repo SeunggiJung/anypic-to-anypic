@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdSenseScript from "@/components/AdSenseScript";
 import { FORMAT_IDS, FORMATS } from "@/lib/formats";
 import { LOCALES, getFormatText, getMessages, isLocale, localePath } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo/meta";
@@ -25,6 +26,7 @@ export default async function FormatsIndexPage({ params }: PageProps<"/[lang]/fo
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
+      <AdSenseScript />
       <h1 className="text-3xl font-extrabold tracking-tight">{p.title}</h1>
       <p className="mt-3 max-w-2xl text-muted">{p.lead}</p>
 
