@@ -16,6 +16,12 @@ A PNG is an image with a fixed width and height in pixels. The moment you conver
 
 The SVG is **drawn directly as a vector at the size you set** and then saved, so a large size stays sharp. That is different from making a small PNG first and enlarging it.
 
+The same SVG logo was saved with this site's converter as 64, 256 and 1024 px wide PNGs, and all three were then shown at the same width (320 px) to compare.
+
+![The same SVG logo saved as 64, 256 and 1024 px PNGs, compared at 320 px wide. The enlarged 64 px file is blurry and the text STAR LEAGUE below can't be read; the 256 px and 1024 px files are sharp](/images/guides/svg-to-png-widths.png)
+
+The 64 px file (3.0KB) blurs at the edges when enlarged and its text can't be read. The 256 px (14.2KB) and 1024 px (81.5KB) files both looked sharp. The bigger the PNG, the bigger the file, so choose a size only a little larger than you need.
+
 - **Width (px)**: set only the width and the height follows the aspect ratio. This is the simplest.
 - **Height (px)** or **Scale (%)** also work.
 - **Set exact size (width × height)**: use it when you need an exact size, such as a square icon. If the SVG has a different ratio, "Keep ratio + fill the margins" centers it and leaves the rest transparent. For example, you can put a wide SVG into a 256×256 PNG.

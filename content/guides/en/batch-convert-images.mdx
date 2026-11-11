@@ -30,9 +30,25 @@ Choose **Set exact size (width × height)** under Size to bring images of mismat
 - The size before and after, and the change, are shown for each file so you can see where the effect is largest.
 - You can also download files one by one with each file's **Download** button.
 
+## Batch speed, measured
+
+100 photos (27.9MB in total, 286KB each on average, about 950×1270) were made and converted together from JPG to WebP (quality 80). The site was served locally and timed in Chromium on the PC used to write this guide (a development desktop).
+
+| Files | Time to convert | Time to build the ZIP | ZIP size |
+| --- | --- | --- | --- |
+| 10 | 2.8 s | 0.1 s | 1.3MB |
+| 50 | 4.4 s | 1.9 s | 6.6MB |
+| 100 | 6.4 s | 1.8 s | 13.1MB |
+
+All 100 converted, the downloaded ZIP held all 100 files with none missing, and the archive passed an integrity check. The 27.9MB became 13.1MB. The time for 10 files includes the first-run setup. Below is the result screen for the 10-file run.
+
+![The result screen after converting 10 photos to WebP. Each file shows its size before and after and the percentage change, with a Download all as ZIP button at the top](/images/guides/batch-result-10.png)
+
+Speed varies a lot with the PC and browser. Batches larger than 100 were not measured.
+
 ## Limits and tips
 
-- Each file can be up to **50MB**. There is no limit on the number of files, but browser memory is finite, so adding a very large number at once can slow things down. For hundreds of files, splitting them up is more stable.
+- Each file can be up to **50MB**. There is no limit on the number of files, but browser memory is finite, so adding a very large number at once can be slower than the measurements above. For sizes that weren't measured (several hundred files or more), splitting them up is safer.
 - Files are processed a few at a time in parallel, and conversion runs on separate worker threads, so the page doesn't freeze while it works.
 - **If HEIC files are mixed in**, the first one takes a few extra seconds while the decoder is downloaded. After that they are processed quickly.
 - Large TIFFs and very large images can fail while processing because of memory. Failed files are shown in the list and don't affect the rest.

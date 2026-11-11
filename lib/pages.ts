@@ -8,8 +8,8 @@ import { CONTACT_EMAIL, MAX_FILE_SIZE_MB, SITE_NAME } from "./site";
 export type StaticPageName = "about" | "privacy" | "terms" | "contact";
 
 export const POLICY_DATE: Record<Locale, string> = {
-  ko: "2026년 10월 20일",
-  en: "October 20, 2026",
+  ko: "2026년 11월 11일",
+  en: "November 11, 2026",
 };
 
 export interface StaticPage {

@@ -21,7 +21,9 @@ Location data in particular needs care: a photo taken near your home or workplac
 
 ## This site removes it by default
 
-This converter redraws the image and saves a new file, so **the converted result doesn't contain EXIF.** That is true for whichever format you convert to. When we converted a JPG that had a location string in it, the result with default settings had no EXIF entry at all.
+This converter redraws the image and saves a new file, so **the converted result doesn't contain EXIF.** That is true for whichever format you convert to. We checked this directly. A test JPG with sample values written into it (camera, time and GPS coordinates) was converted from JPG to JPG, and the EXIF of all three files was read back. The result with default settings kept no EXIF entries and no GPS entries at all. (The coordinates are made-up sample values.)
+
+![The original sample has Make, Model, Software, DateTime and GPS latitude and longitude; the result converted with default settings has no EXIF or GPS; the result converted with the EXIF-removal option off keeps the same values as the original](/images/guides/exif-before-after.png)
 
 So to remove location data, just upload the photo and convert it. Converting to the same JPG works too (JPG → JPG, quality 90 or higher recommended).
 

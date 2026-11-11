@@ -18,10 +18,19 @@ Your browser's developer tools record every request a page makes. If a file were
 4. Look at the **Method** column in the list. A request that sends a file to a server is usually a `POST` or `PUT`. You can turn on the **Fetch/XHR** filter if you like.
 5. Check the request size too. If a file were uploaded, an amount of data about the size of the file would be transferred.
 
-When we converted a 1280×720 image to JPG while recording every request, there were **0** `POST`, `PUT` or `PATCH` requests, and no request carried a body. All you see are `GET` requests that fetch the site's pages and scripts, and `HEAD` requests that preload links.
+On 2026-11-11 every request was recorded on the live site while a 1280×720 image was converted to JPG (Chromium driven by Playwright).
+
+![Requests recorded on the live site: 42 while the page loads (site files, advertising domains, a Cloudflare analytics script and one POST), 6 while converting the image (all GET), 0 POST, PUT or PATCH during the conversion, and the conversion still works offline](/images/guides/request-log-live.png)
+
+- **While converting**, there were 6 requests and all of them were `GET`. There were **0** `POST`, `PUT` or `PATCH` requests, and none carried the image.
+- **While the page loads**, besides `GET` requests for the site's files and `HEAD` requests that check links, there were requests to Google advertising domains, a Cloudflare analytics script, and **one `POST` (837 bytes)** to `anypictoanypic.com/cdn-cgi/rum`. That `POST` is Cloudflare's visit-measurement signal. It is sent once when the page opens, before you have added any image, and 837 bytes can't be compared to an image of hundreds of KB.
+
+<Callout title="So is 'there is no POST' wrong?">
+To be precise: **no request that carries your file goes out while the image is converted.** But when the page opens there is traffic with the ad service and the visit-measurement tool. When checking, look only at the requests made "while you add and convert the image": clear the Network log (Clear) right before adding the image, and only the requests from that stretch remain. The tools this site uses for visit measurement and ads are listed in the [Privacy Policy](/privacy/).
+</Callout>
 
 <Callout title="What are the requests you see at first?">
-You may see requests that fetch the site's own files (pages and scripts), and a request for the script that does the conversion (the Worker) the first time you convert. The first time you convert a HEIC file, the decoder script is downloaded too. These fetch the site's **code**; none of it is your file going out. When ads are turned on, you may also see requests to advertising-service domains, but they do not include your image content.
+You may see requests that fetch the site's own files (pages and scripts), and a request for the script that does the conversion (the Worker) the first time you convert. The first time you convert a HEIC file, the decoder script is downloaded too. These fetch the site's **code**; none of it is your file going out.
 </Callout>
 
 ## Method 2: Convert while offline
@@ -32,7 +41,7 @@ A site that has to send your file to a server stops working when the internet is
 2. In the developer tools' Network tab choose **Offline**, or turn off Wi-Fi.
 3. Without refreshing, add another image and convert it.
 
-Images still convert normally offline. When we tried it ourselves, converting a PNG to WebP offline on the same page worked. Note that if you refresh or move to another page, the site itself can't load, so test with the page left open.
+Images still convert normally offline. When we tried it ourselves, converting a 1280×720 PNG to WebP offline on the same page worked (52.0KB to 24.7KB). Note that if you refresh or move to another page, the site itself can't load, so test with the page left open.
 
 ## Method 3: Understand the structure
 
