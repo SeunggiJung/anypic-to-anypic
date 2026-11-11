@@ -80,7 +80,7 @@ for (const { url, html } of pages) {
     else if (noindexUrls.has(href) && !noindexUrls.has(url)) warn(url, `noindex 페이지로 가는 내부 링크 ${href}`);
   }
   // 이미지 alt
-  for (const m of html.matchAll(/<img ((?:(?!>).)*)>/g)) if (!/\salt=/.test(m[1])) warn(url, "alt 없는 img");
+  for (const m of html.matchAll(/<img ((?:(?!>).)*)>/g)) if (!/(^|\s)alt=/.test(m[1])) warn(url, "alt 없는 img");
 }
 
 for (const [t, list] of titles) if (list.length > 1) warn(list[0], `title 중복 (${list.length}개 페이지): ${t}`);

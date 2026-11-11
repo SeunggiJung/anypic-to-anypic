@@ -1,6 +1,6 @@
 ---
 title: "PNG vs JPG: Which Should You Save As?"
-description: "We saved a photo and a screenshot-like image as both PNG and JPG and compared file sizes. PNG isn't always bigger, and here is how to choose by use."
+description: "We saved a photo and a screenshot-like image as PNG and JPG and compared file sizes and the smearing around text up close. Here is how to choose by use."
 date: 2026-10-20
 tags: [PNG, JPG, comparison]
 related: [png-to-jpg, jpg-to-png]
@@ -19,28 +19,32 @@ related: [png-to-jpg, jpg-to-png]
 
 ## Measured file sizes
 
-We saved a **photo** (1280×854) in both formats.
+We saved two **photos** taken for this guide (a chicken dish and a dog, 1280px on the long side) in both formats with this site's converter.
+
+| Photo | PNG | JPG quality 95 | JPG quality 90 | JPG quality 80 |
+| --- | --- | --- | --- | --- |
+| Chicken | 2.6MB | 497KB | 343KB | 226KB |
+| Dog | 2.3MB | 410KB | 272KB | 175KB |
+
+For the photos, PNG was about eight to nine times the size of JPG at quality 90. A photo whose colors flow smoothly has little to remove when it is saved losslessly.
+
+We also measured a **screenshot or UI-style image**: a 1280×720 settings screen drawn for this guide (flat-color background, small text, thin lines), saved with this site's converter.
 
 | Format | File size |
 | --- | --- |
-| PNG | 2.2MB |
-| JPG quality 95 | 556KB |
-| JPG quality 90 | 417KB |
-| JPG quality 80 | 298KB |
+| PNG | 88.0KB |
+| JPG quality 95 | 62.7KB |
+| JPG quality 80 | 39.9KB |
+| JPG quality 60 | 30.9KB |
+| WebP quality 90 | 24.7KB |
 
-For the photo, PNG was more than five times the size of JPG at quality 90. A photo whose colors flow smoothly has little to remove when it is saved losslessly.
+For this image JPG was smaller than PNG even at quality 95. But a smaller file means something was thrown away, so here is the same area (180×56 px around some text) enlarged 3×.
 
-We also measured a **screenshot-like image**: a 1280×720 image we made to look like a settings screen, with flat-color backgrounds and text.
+![The same area around some text enlarged 3×. PNG 88.0KB, JPG 95 62.7KB, JPG 80 39.9KB, JPG 60 30.9KB, WebP 90 24.7KB. At JPG 60 the edges of the small text look smeared](/images/guides/text-zoom-png-jpg-webp.png)
 
-| Format | File size |
-| --- | --- |
-| PNG | 108KB |
-| JPG quality 95 | 128KB |
-| JPG quality 90 | 105KB |
-| JPG quality 80 | 83KB |
-| WebP quality 90 | 44KB |
+JPG 95 and 80 are hard to tell apart, but **at JPG 60 the edges of the small text look smeared and speckled.** When you lower the quality to shrink an image full of text and lines, this is the first thing to show up. WebP 90 was the smallest in this comparison and showed no obvious smearing.
 
-This time **PNG was smaller than JPG at quality 95**, and about the same as quality 90. PNG compresses large areas of the same color well. JPG also leaves blocky blur around text, so for an image with text, PNG is the sharper choice when the sizes are similar. These numbers come from a single image each and vary with content.
+Note that the PNG a browser writes is larger than one saved by an optimizing tool. The original of this image was 52.0KB as an optimized PNG, while the PNG this site saved through the browser was 88.0KB. So which of PNG and JPG comes out smaller depends on the image and the tool that saves it; treat these numbers as the result for this one image.
 
 ## How to choose
 

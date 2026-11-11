@@ -43,7 +43,13 @@ function componentsFor(lang: Locale) {
     );
   }
 
-  return { a: A, Callout, ConvertLink };
+  /** 글 속 이미지: 본문 폭에 맞추고 늦게 불러온다. 대체 텍스트(alt)는 글에서 반드시 적는다. */
+  function Img({ alt = "", ...rest }: ComponentProps<"img">) {
+    // eslint-disable-next-line @next/next/no-img-element -- 정적 export(images.unoptimized)라 next/image의 이점이 없다
+    return <img alt={alt} loading="lazy" decoding="async" className="my-4 h-auto max-w-full rounded-lg border border-border" {...rest} />;
+  }
+
+  return { a: A, Callout, ConvertLink, img: Img };
 }
 
 export function Mdx({ source, lang }: { source: string; lang: Locale }) {

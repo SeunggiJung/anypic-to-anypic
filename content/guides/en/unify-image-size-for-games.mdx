@@ -24,6 +24,10 @@ Settle three things before you start and you won't get confused.
 4. Choose **How to fit** and **Image position**.
 5. Convert, then download everything as a ZIP. File names keep their original names and only the extension changes.
 
+Below is the options screen you'll see in steps 3 and 4, with the size set to "Set exact size" and 256×256 entered.
+
+![The options screen: size set to exact 256×256, fit method "Keep ratio + fill the margins", image position centered](/images/guides/converter-options-en.png)
+
 ## Four ways to fit, and when to use each
 
 Suppose you're making a 256×128 image into 256×256.
@@ -42,6 +46,31 @@ PNG, WebP, GIF and ICO keep margins **transparent**. JPG and BMP can't represent
 
 ### Image position
 The default is the center, but you can change it on the 3×3 grid. For example, with character sprites set to **bottom alignment**, characters of different sizes get their feet on the same line. When filling the frame, the side opposite your alignment is the one that gets cropped. Aligning a portrait to the top when cropping helps keep faces from being cut off.
+
+## Four sample logos, run through the converter
+
+Descriptions only go so far, so four logos of different sizes and formats were made and converted together with this site's converter. These logos are **made-up samples** created for this guide, not images from a real game. The settings are the ones in the screen above: PNG, 256×256, "Keep ratio + fill the margins", centered.
+
+![Four logos before conversion (a wide PNG, a tall PNG, a JPG with a white background, a small WebP) next to the four 256×256 PNGs after conversion](/images/guides/sample-logos-before-after-en.png)
+
+This is the result screen the converter showed:
+
+![The results screen: nova-wide.png 13.7KB to 9.7KB, ember-tall.png 6.6KB to 9.2KB, tide-white.png 13.6KB to 21.4KB, volt-small.png 1.4KB to 43.8KB, all 256×256](/images/guides/converter-result-en.png)
+
+| Sample | Original | After (256×256 PNG) | Worth noticing |
+| --- | --- | --- | --- |
+| NOVA | 640×240 PNG, 13.7KB | 9.7KB | The wide shape is unchanged and transparent space fills top and bottom. |
+| EMBER | 200×420 PNG, 6.6KB | 9.2KB | The tall shape is unchanged and transparent space fills left and right. |
+| TIDE | 512×512 JPG, 13.6KB | 21.4KB | **The white background stayed.** |
+| VOLT | 96×96 WebP, 1.4KB | 43.8KB | **The edges turned blurry because it was enlarged.** |
+
+Three things to take from this:
+
+- **A JPG's white background doesn't become transparent.** The converter only keeps transparent areas transparent. A JPG never had transparency; its background is filled with white, so after converting to PNG the white remains part of the image. If you need a transparent background, find a transparent PNG original or run it through a background-removal tool.
+- **Enlarging a small original makes it blurry.** Taking 96×96 up to 256×256 doesn't create detail that wasn't there. Whenever possible, shrink down from an original that's larger than the spec.
+- **File size doesn't always go down.** In this sample only NOVA got smaller; the others grew. Enlarging a small image and saving it as PNG in particular makes the file much bigger. You can check the size of each file on the result screen.
+
+The numbers are for these four samples converted with the settings above, and they'll differ with your own images.
 
 ## Take care with pixel art
 

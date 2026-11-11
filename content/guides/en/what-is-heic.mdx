@@ -34,7 +34,31 @@ Drop the HEIC file onto this site and choose JPG, and it is converted right in y
 
 <ConvertLink to="heic-to-jpg">Convert HEIC to JPG</ConvertLink>
 
-Here is a measured example. A 1280×854 HEIC sample (701KB) became 417KB as a quality-90 JPG. That sample was already heavily compressed, so it shrank; in general HEIC tends to be smaller than a JPG of the same quality, so a high quality setting can make the file grow. Check the real size on the result screen.
+### HEIC file sizes, measured
+
+One thing first: the HEIC files used for this measurement **were not made by an iPhone.** They are test files made by saving two photos taken for this guide (a chicken dish and a dog) as HEIC with libheif (the x265 encoder). It is the same format, but an iPhone's encoder settings may differ. Both photos were scaled down to 1280px on the long side.
+
+| Photo | JPG quality 90 | HEIC quality 50 | HEIC quality 70 | HEIC quality 90 |
+| --- | --- | --- | --- | --- |
+| Chicken | 343KB | 176KB | 464KB | 842KB |
+| Dog | 272KB | 119KB | 399KB | 753KB |
+
+Going by the numbers alone, HEIC at quality 90 is far bigger than JPG at quality 90. That is because **a quality number means different things in different encoders, so the same number is not the same visual quality.** So the two were compared at the same closeness to the source (PSNR, in dB). Drawing straight lines between the measured points to estimate, at the same PSNR HEIC was about 39% smaller than JPG for the chicken photo and about 37% smaller for the dog photo. That is a little less than the common "about half the size of a JPG", and it is an estimate for two photos and this encoder setting.
+
+![The same area enlarged 3×: the PNG source, JPG 80 (175KB), WebP 80 (111KB) and HEIC 50 (119KB). They are almost indistinguishable by eye](/images/guides/photo-zoom-jpg-webp-heic.png)
+
+Enlarged, HEIC 50 (119KB) is hard to tell apart from JPG 80 (175KB) by eye.
+
+Opening these HEIC files on this site and converting them to JPG (quality 90) gave the following.
+
+| Photo | HEIC | Converted to JPG 90 |
+| --- | --- | --- |
+| Chicken | quality 50, 176KB | 343KB |
+| Chicken | quality 70, 464KB | 371KB |
+| Dog | quality 50, 119KB | 268KB |
+| Dog | quality 70, 399KB | 296KB |
+
+**Converting a small HEIC to a high-quality JPG can make the file larger**, because HEIC compresses more efficiently. If size matters, try a lower JPG quality and check the real size on the result screen.
 
 ### 2. Shoot JPG from now on
 
@@ -46,7 +70,7 @@ At the bottom of the Photos section in Settings there is a Transfer to Mac or PC
 
 ## JPG or PNG?
 
-Unless you have a specific reason, JPG is recommended. Converting the same sample to PNG gives 2.2MB, more than five times the JPG (417KB). PNG only makes sense when you need a transparent background or want to avoid degradation across many edits. A closer comparison is on the [PNG](/formats/png/) and [JPG](/formats/jpg/) pages.
+Unless you have a specific reason, JPG is recommended. Saving the same chicken photo as PNG gives 2.6MB, more than seven times the JPG at quality 90 (343KB). PNG only makes sense when you need a transparent background or want to avoid degradation across many edits. A closer comparison is on the [PNG](/formats/png/) and [JPG](/formats/jpg/) pages.
 
 ## What you lose when converting
 

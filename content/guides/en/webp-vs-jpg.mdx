@@ -22,15 +22,26 @@ JPG has no transparent background and loses a little quality each time you save,
 
 ## How different is the file size?
 
-Google says WebP is roughly 25-35% smaller than JPG at the same quality. What does it look like in practice? We saved one 1280×854 photo with this site's converter at the same quality numbers and compared.
+Google says WebP is roughly 25-35% smaller than JPG at the same quality. What does it look like in practice? Two photos taken for this guide (a foil-wrapped chicken dish and a dog's face) were saved with this site's converter at the same quality numbers and compared. Both started from a PNG scaled down to 1280px on the long side.
 
-| Quality | JPG | WebP | Difference |
-| --- | --- | --- | --- |
-| 90 | 417KB | 370KB | about 11% smaller |
-| 80 | 298KB | 264KB | about 11% smaller |
-| 60 | 202KB | 194KB | about 4% smaller |
+![The two photos used for the test: a foil-wrapped chicken dish on the left and a dog's face on the right, scaled down to 960×1280 and 952×1280](/images/guides/test-photos.jpg)
 
-This is one photo, so it varies by image. Two points stand out. First, the encoders for the two formats behave differently, so the same quality number doesn't mean the same visual quality. Second, the gap shrank as quality dropped. Savings of tens of percent come when the image content and settings suit it well.
+| Photo | Quality | JPG | WebP | How much smaller WebP is |
+| --- | --- | --- | --- | --- |
+| Chicken | 90 | 343KB | 300KB | about 13% |
+| Chicken | 80 | 226KB | 171KB | about 24% |
+| Chicken | 60 | 146KB | 107KB | about 27% |
+| Dog | 90 | 272KB | 218KB | about 20% |
+| Dog | 80 | 175KB | 111KB | about 37% |
+| Dog | 60 | 109KB | 66.2KB | about 39% |
+
+But **the same quality number is not the same visual quality**, because the two encoders behave differently. Measuring closeness to the source with PSNR (in dB; higher means closer), JPG 80 scores 38.8dB and WebP 80 scores 37.7dB on the dog photo. Part of why WebP came out smaller is that it threw away more.
+
+So the two were compared again **at the same closeness to the source**. Drawing straight lines between the measured points to estimate, at the same PSNR WebP was about 30% smaller than JPG for the chicken photo and about 23% smaller for the dog photo. That is close to the 25-35% Google mentions. This is the result for two photos, and PSNR is only one of several ways to measure quality, so treat the figure as an estimate.
+
+![The same area enlarged 3×: the PNG source, JPG 80 (175KB), WebP 80 (111KB) and HEIC 50 (119KB). They are almost indistinguishable by eye; WebP 80 smooths the fine hairs very slightly more](/images/guides/photo-zoom-jpg-webp-heic.png)
+
+Enlarging the same area (around the dog's eye) shows little difference. WebP 80 smooths the fine hairs only slightly more. (HEIC 50 is covered in the [HEIC guide](/guides/what-is-heic/).)
 
 ## When a transparent background matters
 
